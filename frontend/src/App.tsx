@@ -1,0 +1,139 @@
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { Toaster } from 'sonner'
+import LoginPage from '@/features/auth/pages/LoginPage'
+import RegisterPage from '@/features/auth/pages/RegisterPage'
+import ForgotPasswordPage from '@/features/auth/pages/ForgotPasswordPage'
+import { MainLayout } from '@/shared/components/layout/MainLayout'
+import DashboardPlaceholder from '@/features/auth/pages/DashboardPlaceholder'
+import FormsSurveysPage from '@/features/Forms/pages/FormsSurveysPage'
+import FormBuilderPage from '@/features/FormBuilder/pages/FormBuilderPage'
+import UserManagementPage from '@/features/UserManagement/pages/UserManagementPage'
+import ProfilePage from '@/features/Settings/pages/ProfilePage'
+import FormsResultsPage from '@/features/Forms/pages/FormsResultsPage'
+import FormResponsePage from '@/features/Forms/pages/FormResponsePage'
+import PublicFormViewPage from '@/features/Forms/pages/PublicFormViewPage'
+import DepartmentManagementPage from '@/features/DepartmentManagement/pages/DepartmentManagementPage'
+import DepartmentDetailPage from '@/features/DepartmentManagement/pages/DepartmentDetailPage'
+import CourseTasksView from '@/features/TaskManagement/pages/CourseTasksView'
+import TaskSubmissionsPage from '@/features/TaskManagement/pages/TaskSubmissionsPage'
+import QuizBuilderPage from '@/features/TaskManagement/pages/QuizBuilderPage'
+import SubmitQuizPage from '@/features/TaskManagement/pages/SubmitQuizPage'
+import InstructorGradingPage from '@/features/TaskManagement/pages/InstructorGradingPage'
+import TaskAnalyticsPage from '@/features/TaskManagement/pages/TaskAnalyticsPage'
+import { ProtectedRoute } from '@/shared/components/layout/ProtectedRoute'
+import StudentDashboardPage from '@/features/StudentPortal/pages/StudentDashboardPage'
+import StudentCoursesAndTasksPage from '@/features/StudentPortal/pages/StudentCoursesAndTasksPage'
+import MySubmissionsPage from '@/features/TaskManagement/pages/MySubmissionsPage'
+import StudentSurveysPage from '@/features/StudentPortal/pages/StudentSurveysPage'
+import CourseDetailView from '@/features/TaskManagement/pages/CourseDetailView'
+import { useAuth } from '@/features/auth/hooks/useAuth'
+
+import InstructorDashboardPage from '@/features/InstructorPortal/pages/InstructorDashboardPage'
+import InstructorCourseManagement from '@/features/InstructorPortal/pages/InstructorCourseManagement'
+import InstructorCourseDetailView from '@/features/InstructorPortal/pages/InstructorCourseDetailView'
+import AdminDashboardPage from '@/features/Analytics/pages/AdminDashboardPage'
+import AiUsageDashboardPage from '@/features/AIUsage/pages/AiUsageDashboardPage'
+import { UserDirectoryPage } from '@/features/UserManagement/components/UserDirectoryPage'
+import UserProfileViewPage from '@/features/UserManagement/pages/UserProfileViewPage'
+import FacilitiesPage from '@/features/FacilityManagement/pages/FacilitiesPage'
+import FacilityViewPage from '@/features/FacilityManagement/pages/FacilityViewPage'
+import HodDashboardPage from './features/HodPortal/pages/HodDashboardPage'
+function DashboardRouter() {
+  const { user } = useAuth();
+  if (user?.role === 'STUDENT') {
+    return <StudentDashboardPage />;
+  }
+  if (user?.role === 'INSTRUCTOR') {
+    return <InstructorDashboardPage />;
+  }
+  if (user?.role === 'ADMIN' || user?.role === 'HOD') {
+    return <AdminDashboardPage />;
+  }
+  return <DashboardPlaceholder />;
+}
+
+function App() {
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        
+        {/* Form Builder routes (Protected) */}
+        <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'HOD', 'INSTRUCTOR']} />}>
+          <Route path="/builder" element={<FormBuilderPage />} />
+          <Route path="/builder/:formId" element={<FormBuilderPage />} />
+        </Route>
+
+        <Route path="/form/:formId" element={<FormResponsePage />} />
+        <Route path="/public/form/:formId" element={<PublicFormViewPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+        {/* Support legacy/specialized form links */}
+        <Route path="/dashboard/forms/:formId" element={<FormResponsePage />} />
+
+        {/* Dashboard layout (Protected) */}
+        <Route path="/dashboard" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+          <Route index element={<DashboardRouter />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="users/:userId/profile" element={<UserProfileViewPage />} />
+          
+          {/* Student routes */}
+          <Route element={<ProtectedRoute allowedRoles={['STUDENT']} />}>
+            <Route path="courses-tasks" element={<StudentCoursesAndTasksPage />} />
+            <Route path="student-evaluations" element={<MySubmissionsPage />} />
+            <Route path="student-surveys" element={<StudentSurveysPage />} />
+            <Route path="student-courses/:courseId" element={<CourseDetailView />} />
+            <Route path="submit-quiz/:taskId" element={<SubmitQuizPage />} />
+          </Route>
+
+          {/* Instructor routes */}
+          <Route element={<ProtectedRoute allowedRoles={['INSTRUCTOR']} />}>
+            <Route path="courses" element={<InstructorCourseManagement />} />
+            <Route path="courses/:courseId" element={<InstructorCourseDetailView />} />
+            <Route path="courses/:courseId/tasks/:taskId" element={<TaskSubmissionsPage />} />
+            <Route path="courses/:courseId/tasks/:taskId/submissions/:submissionId/grade" element={<InstructorGradingPage />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'HOD', 'INSTRUCTOR']} />}>
+            <Route path="forms-surveys" element={<FormsSurveysPage />} />
+            <Route path="builder" element={<Navigate to="/builder" replace />} />
+            <Route path="quiz-builder" element={<QuizBuilderPage />} />
+            <Route path="users" element={<UserManagementPage />} />
+            <Route path="directory" element={<UserDirectoryPage />} />
+
+            {/* ── Hierarchical Department ➔ Course ➔ Task ➔ Submissions ── */}
+            <Route path="departments" element={<DepartmentManagementPage />} />
+            <Route path="departments/:departmentId" element={<DepartmentDetailPage />} />
+            <Route path="departments/:departmentId/courses/:courseId" element={<CourseTasksView />} />
+            <Route path="departments/:departmentId/courses/:courseId/tasks/:taskId" element={<TaskSubmissionsPage />} />
+            <Route path="departments/:departmentId/courses/:courseId/tasks/:taskId/submissions/:submissionId/grade" element={<InstructorGradingPage />} />
+
+            {/* Custom Facilities */}
+            <Route path="facilities" element={<FacilitiesPage />} />
+            <Route path="facilities/:id" element={<FacilityViewPage />} />
+
+            <Route path="ai-usage-dashboard" element={<AiUsageDashboardPage />} />
+            <Route path="task-analytics" element={<TaskAnalyticsPage />} />
+            <Route path="forms-results/:formId" element={<FormsResultsPage />} />
+          </Route>
+        </Route>
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+
+      {/* ── Sonner Toaster ─────────────────────────────────────── */}
+      <Toaster
+        position="top-right"
+        richColors
+        toastOptions={{
+          style: {
+            fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+          },
+        }}
+      />
+    </>
+  )
+}
+
+export default App

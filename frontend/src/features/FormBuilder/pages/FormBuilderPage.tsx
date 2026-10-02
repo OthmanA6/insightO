@@ -1,0 +1,1681 @@
+import { useState, useCallback, useMemo, useEffect, useRef } from "react"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors
+} from "@dnd-kit/core"
+import type { DragEndEvent } from "@dnd-kit/core"
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable"
+import {
+  Plus,
+  Trash2,
+  Settings,
+  Eye,
+  CheckSquare,
+  ArrowLeft,
+  Share2,
+  Type,
+  AlignLeft,
+  Star,
+  Upload,
+  Zap,
+  Lock,
+  LayoutGrid,
+  Loader2,
+  AlertTriangle,
+  Save,
+  Rocket,
+  X,
+  Copy,
+  Check,
+  Download,
+  Smartphone,
+  Monitor,
+  Info,
+  Search,
+  AlertCircle,
+  ChevronDown,
+  CircleDot
+} from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { cn } from "@/shared/lib/utils"
+import { QRCodeCanvas } from "qrcode.react"
+
+import { Button } from "@/shared/components/ui/button"
+import { Label } from "@/shared/components/ui/label"
+import { Switch } from "@/shared/components/ui/switch"
+import { Input } from "@/shared/components/ui/input"
+import { Modal } from "@/shared/components/ui/Modal"
+import { toast } from "sonner"
+
+import type { Question, QuestionType, FormRole } from "../types/form.types"
+import { QuestionCard } from "../components/QuestionCard"
+import * as formApi from "../api/formApi"
+import * as departmentApi from "@/shared/api/departmentApi"
+import * as courseApi from "@/shared/api/courseApi"
+import * as userAdminApi from "@/shared/api/userAdminApi"
+import * as taskApi from "@/features/TaskManagement/api/taskApi"
+import { uploadFile } from "@/shared/api/utilityApi"
+import api from "@/shared/api/axiosInstance"
+import type { Department } from "@/shared/api/departmentApi"
+import type { Course } from "@/shared/api/courseApi"
+import type { AdminUser } from "@/shared/api/userAdminApi"
+
+const INITIAL_QUESTIONS: Question[] = [
+  {
+    id: "q1",
+    type: "linear_scale",
+    label: "How would you rate the overall performance of the subject?",
+    required: true,
+    order: 1,
+    scale: { min: 1, max: 5 }
+  }
+]
+
+
+
+const Tooltip = ({ text, children }: { text: string; children: React.ReactNode }) => {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative flex items-center group" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      {children}
+      <AnimatePresence>
+        {show && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 5 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 5 }}
+            className="absolute bottom-full mb-2 start-1/2 -translate-x-1/2 z-[100] w-48 p-2 rounded-xl backdrop-blur-md bg-black/80 border border-panel-hover text-[10px] font-bold text-content shadow-2xl pointer-events-none text-center"
+          >
+            {text}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+
+
+export default function FormBuilderPage() {
+  const navigate = useNavigate()
+  const { formId } = useParams<{ formId: string }>()
+  const [searchParams] = useSearchParams()
+  const taskId = searchParams.get('taskId')
+  const [isLoading, setIsLoading] = useState(!!formId)
+
+  // ─── Form Settings State ───
+  const [category, setCategory] = useState<"GENERAL" | "SPECIALIZED" | "QUIZ">(taskId ? "QUIZ" : "SPECIALIZED")
+  const [formTitle, setFormTitle] = useState("New Evaluation Template")
+  const [formDescription, setFormDescription] = useState("Provide feedback for the academic quarter.")
+  const [evaluatorRoles, setEvaluatorRoles] = useState<FormRole[]>(["STUDENT"])
+  const [subjectRole, setSubjectRole] = useState<FormRole>("INSTRUCTOR")
+  const [isAnonymous, setIsAnonymous] = useState(false)
+  const [isActive, setIsActive] = useState(true)
+  const [departmentId, setDepartmentId] = useState("")
+  const [courseId, setCourseId] = useState("")
+  const [instructorId, setInstructorId] = useState("")
+  const [facilityId, setFacilityId] = useState("")
+  const [departments, setDepartments] = useState<Department[]>([])
+  const [courses, setCourses] = useState<Course[]>([])
+  const [instructors, setInstructors] = useState<AdminUser[]>([])
+  const [facilities, setFacilities] = useState<any[]>([])
+  const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({})
+
+  const [questions, setQuestions] = useState<Question[]>(INITIAL_QUESTIONS)
+  const [activeId, setActiveId] = useState<string | null>("q1")
+
+  const [isPublishing, setIsPublishing] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<"Saved" | "Saving..." | "Error">("Saved")
+
+  // Modals State
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [isPreviewMobile, setIsPreviewMobile] = useState(false)
+  const [isShareOpen, setIsShareOpen] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
+  const [previewUploads, setPreviewUploads] = useState<Record<string, { name: string, url: string, loading: boolean }>>({})
+  const [previewAnswers, setPreviewAnswers] = useState<Record<string, any>>({})
+
+  // AI Generator state
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false)
+  const [aiPrompt, setAiPrompt] = useState("")
+  const [aiFile, setAiFile] = useState<File | null>(null)
+  const [aiLanguage, setAiLanguage] = useState<"English" | "Arabic">("English")
+
+  // Sidebar Tabs
+  const [sidebarTab, setSidebarTab] = useState<'form' | 'field'>('form')
+  const [isAIGenerating, setIsAIGenerating] = useState(false)
+  const [aiStep, setAiStep] = useState(0)
+
+  const [generatedFormId, setGeneratedFormId] = useState<string | null>(null)
+
+  // Derived share link
+  const effectiveFormId = formId || generatedFormId;
+  const isPublicForm = category === "GENERAL" || subjectRole === "FACILITY";
+  const shareUrl = effectiveFormId
+    ? (isPublicForm
+      ? `${window.location.origin}/public/form/${effectiveFormId}`
+      : `${window.location.origin}/form/${effectiveFormId}`)
+    : `${window.location.origin}/form/preview`;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [deptData, courseData, userData, facilityRes] = await Promise.all([
+          departmentApi.getAllDepartments(),
+          courseApi.getCourses(),
+          userAdminApi.getAllUsers(),
+          api.get('/facilities').catch(() => ({ data: { data: { facilities: [] } } }))
+        ])
+        setDepartments(deptData)
+        setCourses(courseData)
+        setInstructors(userData.filter(u => u.role === 'INSTRUCTOR'))
+        setFacilities(facilityRes.data?.data?.facilities || [])
+
+        if (formId) {
+          const form = await formApi.getForm(formId)
+          setFormTitle(form.title)
+          setFormDescription(form.description || "")
+          setCategory(form.category || "SPECIALIZED")
+          setEvaluatorRoles(form.evaluator_roles)
+          setSubjectRole(form.course_id ? "COURSE" : form.subject_role)
+          setIsAnonymous(form.is_anonymous)
+          setIsActive(form.is_active)
+          setDepartmentId(form.department_id || "")
+          setCourseId(form.course_id || "")
+          setInstructorId(form.instructor_id || "")
+          setFacilityId(form.facility_id || "")
+
+          if (form.questions && form.questions.length > 0) {
+            // Defensive mapping: Ensure questions have required fields for their type
+            const sanitizedQuestions = form.questions.map((q: any) => ({
+              ...q,
+              options: (q.type === "multiple_choice" || q.type === "checkbox") ? (q.options?.length ? q.options : ["Option 1", "Option 2"]) : undefined,
+              scale: q.type === "linear_scale" ? (q.scale || { min: 1, max: 5 }) : undefined,
+              file_config: q.type === "file" ? (q.file_config || { allowed_types: ["application/pdf"], max_size: 5242880 }) : undefined,
+            }))
+            setQuestions(sanitizedQuestions)
+            setActiveId(sanitizedQuestions[0]._id || sanitizedQuestions[0].id || null)
+          }
+        } else {
+          // Pre-populate if query parameters are present
+          const target = searchParams.get('target');
+          const queryFacilityId = searchParams.get('facilityId');
+          if (target === 'facility') {
+            setSubjectRole('FACILITY');
+            setCategory('SPECIALIZED');
+            if (queryFacilityId) {
+              setFacilityId(queryFacilityId);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load data")
+        toast.error("Failed to load form architecture")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchData()
+  }, [formId])
+
+  const activeQuestion = useMemo(() =>
+    questions.find(q => q.id === activeId) || null
+    , [questions, activeId])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (over && active.id !== over.id) {
+      setQuestions((items) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id)
+        const newIndex = items.findIndex((i) => i.id === over.id)
+        const moved = arrayMove(items, oldIndex, newIndex)
+        return moved.map((q, idx) => ({ ...q, order: idx + 1 }))
+      })
+    }
+  }
+
+  const addQuestion = useCallback((type: QuestionType = "short_text") => {
+    const newId = `q-${Math.random().toString(36).substr(2, 9)}`
+    const newQuestion: Question = {
+      id: newId,
+      type,
+      label: `Untitled ${type.replace('_', ' ')}`,
+      required: false,
+      order: questions.length + 1,
+      options: (type === "multiple_choice" || type === "checkbox") ? ["Option 1", "Option 2"] : undefined,
+      scale: type === "linear_scale" ? { min: 1, max: 5 } : undefined,
+      file_config: type === "file" ? { allowed_types: ["application/pdf"], max_size: 5242880 } : undefined
+    }
+    setQuestions(prev => [...prev, newQuestion])
+    setActiveId(newId)
+  }, [questions.length])
+
+  const deleteQuestion = useCallback((id: string) => {
+    setQuestions(prev => prev.filter(q => q.id !== id).map((q, idx) => ({ ...q, order: idx + 1 })))
+    if (activeId === id) setActiveId(null)
+  }, [activeId])
+
+  const updateQuestion = useCallback((id: string, updates: Partial<Question>) => {
+    setQuestions(prev => prev.map(q => q.id === id ? { ...q, ...updates } : q))
+    setSaveStatus("Saving...")
+    setTimeout(() => setSaveStatus("Saved"), 500)
+  }, [])
+
+  const handlePublish = async () => {
+    if (formTitle.length < 5) {
+      toast.error("Form title is too short (min 5 characters)")
+      return
+    }
+
+    // Validation for specialized fields
+    const errors: Record<string, boolean> = {}
+    if (category === "SPECIALIZED") {
+      if (subjectRole !== "FACILITY" && !departmentId) {
+        errors.department = true
+      }
+      if (subjectRole === "COURSE") {
+        if (!courseId) errors.course = true
+        if (!instructorId) errors.instructor = true // الكورس دايما مربوط بدكتور
+      }
+
+      if (subjectRole === "INSTRUCTOR") {
+        if (!instructorId) errors.instructor = true // لازم نختار الدكتور
+      }
+
+      if (subjectRole === "FACILITY") {
+        if (!facilityId) errors.facility = true
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors)
+      setActiveId('title')
+      return
+    }
+
+    // ─── Backend Compliance Validation ───
+    const actualSubjectRole = subjectRole;
+    let finalEvaluatorRoles = evaluatorRoles;
+    if (actualSubjectRole === "FACILITY") {
+      finalEvaluatorRoles = ["GENERAL"] as FormRole[];
+    }
+
+    if (finalEvaluatorRoles.includes(actualSubjectRole)) {
+      toast.error(`Conflict: Evaluator roles cannot include the Subject role (${actualSubjectRole}).`)
+      return
+    }
+
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i]
+      const qNum = i + 1
+
+      if (q.label.trim().length < 3) {
+        toast.error(`Question ${qNum}: Label must be at least 3 characters.`)
+        return
+      }
+
+      if (q.type === "multiple_choice" || q.type === "checkbox") {
+        if (!q.options || q.options.length < 2) {
+          toast.error(`Question ${qNum}: Multiple choice requires at least 2 options.`)
+          return
+        }
+        if (q.options.some(opt => opt.trim().length === 0)) {
+          toast.error(`Question ${qNum}: All options must have content.`)
+          return
+        }
+      }
+    }
+
+    setIsPublishing(true)
+    try {
+      let form;
+      if (formId) {
+        // 1. Update existing Form Settings
+        form = await formApi.updateFormSettings(formId, {
+          title: formTitle,
+          description: formDescription,
+          category: category,
+          is_active: isActive,
+          is_anonymous: isAnonymous,
+          evaluator_roles: finalEvaluatorRoles,
+          facility_id: category === "SPECIALIZED" && subjectRole === "FACILITY" && facilityId ? facilityId : undefined,
+        } as any)
+      } else {
+        // 1. Create the Form (تعديل الـ Payload هنا)
+        form = await formApi.createForm({
+          title: formTitle,
+          description: formDescription,
+          category: category,
+          evaluator_roles: finalEvaluatorRoles,
+          subject_role: actualSubjectRole as FormRole,
+          is_anonymous: isAnonymous,
+          is_active: isActive,
+          department_id: category === "SPECIALIZED" && subjectRole !== "FACILITY" && departmentId ? departmentId : undefined,
+          course_id: category === "SPECIALIZED" && subjectRole === "COURSE" && courseId ? courseId : undefined,
+          // هنبعت الـ instructor_id لو كنا بنقيم كورس أو دكتور بشكل مباشر
+          instructor_id: category === "SPECIALIZED" && ["COURSE", "INSTRUCTOR"].includes(subjectRole) && instructorId ? instructorId : undefined,
+          facility_id: category === "SPECIALIZED" && subjectRole === "FACILITY" && facilityId ? facilityId : undefined,
+        })
+      }
+
+      const currentFormId = formId || form._id || form.id;
+
+      // Link form to task if taskId is present
+      if (taskId) {
+        await taskApi.updateTask(taskId, { form_id: currentFormId });
+      }
+
+      // 2. Sync Questions
+      for (const q of questions) {
+        const payload: any = {
+          label: q.label,
+          type: q.type,
+          required: q.required,
+          order: q.order,
+        }
+
+        if (q.type === 'multiple_choice' || q.type === 'checkbox') payload.options = q.options
+        if (q.type === 'linear_scale') payload.scale = q.scale
+        if (q.type === 'file') payload.file_config = q.file_config
+        if (q.type === 'short_text' && q.text_validation) payload.text_validation = q.text_validation
+
+        // If it has a MongoDB ID, it's an existing question
+        const qId = q._id || (q.id?.length === 24 ? q.id : null);
+
+        if (qId) {
+          await formApi.updateQuestion(qId, payload)
+        } else {
+          await formApi.addQuestion(currentFormId, payload)
+        }
+      }
+
+      if (formId) {
+        toast.success("Form Architecture Updated!")
+        navigate(taskId ? "/dashboard/tasks" : "/dashboard/forms-surveys")
+      } else {
+        if (taskId) {
+          toast.success("Quiz linked to Task successfully")
+          navigate("/dashboard/tasks")
+        } else {
+          toast.success("Form Architecture Published!")
+          setGeneratedFormId(currentFormId)
+          setIsShareOpen(true)
+        }
+      }
+    } catch (err: any) {
+      console.error("Publishing Error:", err)
+      const backendMessage = err.response?.data?.message || err.response?.data?.error || "Failed to publish architecture"
+      toast.error(backendMessage)
+    } finally {
+      setIsPublishing(false)
+    }
+  }
+
+  const toggleRole = (role: FormRole) => {
+    setEvaluatorRoles(prev =>
+      prev.includes(role) ? prev.filter(r => r !== role) : [...prev, role]
+    )
+  }
+
+  const handleCategoryChange = (newCategory: "GENERAL" | "SPECIALIZED" | "QUIZ") => {
+    if (newCategory === category) return
+    setCategory(newCategory)
+
+    // Clear irrelevant fields to keep payload clean
+    if (newCategory === "GENERAL") {
+      setDepartmentId("")
+      setCourseId("")
+      setInstructorId("")
+      setEvaluatorRoles(["STUDENT"]) // Reset to default
+      setSubjectRole("INSTRUCTOR")   // Reset to default
+    }
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(shareUrl)
+    setIsCopied(true)
+    toast.success("Share link copied to clipboard")
+    setTimeout(() => setIsCopied(false), 2000)
+  }
+
+  const handleDownloadQR = () => {
+    const qrCanvas = document.getElementById('qr-code-canvas') as HTMLCanvasElement;
+    if (!qrCanvas) return;
+
+    const scale = 3; // 3x resolution for high quality
+
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    if (!tempCtx) return;
+    tempCtx.font = `bold ${22 * scale}px sans-serif`;
+
+    const width = 450 * scale;
+    const maxWidth = width - (80 * scale);
+    const downloadTitle = formTitle || 'Untitled Form';
+    const words = downloadTitle.split(' ');
+    let line = '';
+    let numLines = 1;
+
+    for (let i = 0; i < words.length; i++) {
+      const testLine = line + words[i] + ' ';
+      const metrics = tempCtx.measureText(testLine);
+      if (metrics.width > maxWidth && i > 0) {
+        numLines++;
+        line = words[i] + ' ';
+      } else {
+        line = testLine;
+      }
+    }
+
+    const titleStartY = 110 * scale;
+    const qrY = titleStartY + (numLines * 32 * scale) + (40 * scale);
+    const qrSize = 260 * scale;
+    const height = qrY + qrSize + (100 * scale);
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    canvas.width = width;
+    canvas.height = height;
+
+    const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+    bgGradient.addColorStop(0, '#0f111a');
+    bgGradient.addColorStop(1, '#1e1b4b');
+    ctx.fillStyle = bgGradient;
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.beginPath(); ctx.arc(width, 0, 200 * scale, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(0, height, 150 * scale, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = '#818cf8';
+    ctx.font = `900 ${28 * scale}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText('insightO', width / 2, 50 * scale);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `bold ${22 * scale}px sans-serif`;
+    line = '';
+    let currentY = titleStartY;
+    for (let i = 0; i < words.length; i++) {
+      const testLine = line + words[i] + ' ';
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && i > 0) {
+        ctx.fillText(line.trim(), width / 2, currentY);
+        line = words[i] + ' ';
+        currentY += 32 * scale;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line.trim(), width / 2, currentY);
+
+    const qrX = (width - qrSize) / 2;
+    ctx.fillStyle = '#ffffff';
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(qrX - (16 * scale), qrY - (16 * scale), qrSize + (32 * scale), qrSize + (32 * scale), 24 * scale);
+      ctx.fill();
+    } else {
+      ctx.fillRect(qrX - (16 * scale), qrY - (16 * scale), qrSize + (32 * scale), qrSize + (32 * scale));
+    }
+
+    ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = `600 ${14 * scale}px sans-serif`;
+    ctx.fillText('Scan to access this form', width / 2, height - (40 * scale));
+
+    const link = document.createElement('a');
+    const safeTitle = downloadTitle.replace(/[<>:"/\\|?*]/g, '').trim().replace(/\s+/g, '-');
+    link.download = `InsightO-${safeTitle}-QR.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  const handleAIGenerate = async () => {
+    if (!aiPrompt.trim() && !aiFile) {
+      toast.error("Please provide a prompt or upload a file.");
+      return;
+    }
+
+    setIsAIGenerating(true);
+    setAiStep(0);
+
+    const stepTexts = [
+      "Analyzing layout requirements...",
+      "Structuring cognitive evaluation metrics...",
+      "Synthesizing customized academic questions...",
+      "Enforcing structural type integrity...",
+      "Finalizing dynamic builder components..."
+    ];
+
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      currentStep++;
+      if (currentStep < stepTexts.length) {
+        setAiStep(currentStep);
+      } else {
+        clearInterval(interval);
+      }
+    }, 900);
+
+    try {
+      const generated = aiFile 
+        ? await formApi.generateAIFormFromFile(aiFile, aiPrompt, aiLanguage)
+        : await formApi.generateAIForm(aiPrompt, aiLanguage);
+      clearInterval(interval);
+
+      const { title, description, questions: generatedQuestions } = generated;
+
+      if (!generatedQuestions || generatedQuestions.length === 0) {
+        throw new Error("No questions were generated by the AI.");
+      }
+
+      const mappedQuestions = generatedQuestions.map((q: any, idx: number) => ({
+        id: `q-ai-${Math.random().toString(36).substr(2, 9)}`,
+        type: q.type,
+        label: q.label,
+        required: !!q.required,
+        order: idx + 1,
+        options: (q.type === "multiple_choice" || q.type === "checkbox") ? (q.options?.length ? q.options : ["Option 1", "Option 2"]) : undefined,
+        scale: q.type === "linear_scale" ? (q.scale || { min: 1, max: 5 }) : undefined,
+        file_config: q.type === "file" ? { allowed_types: ["application/pdf"], max_size: 5242880 } : undefined
+      }));
+
+      setQuestions(mappedQuestions);
+      setFormTitle(title || `${aiPrompt.substring(0, 30)} Assessment`);
+      setFormDescription(description || `AI Generated survey based on: "${aiPrompt}"`);
+
+      if (mappedQuestions.length > 0) {
+        setActiveId(mappedQuestions[0].id!);
+      }
+      setIsAIModalOpen(false);
+      setAiPrompt("");
+      toast.success("AI form structure synthesized perfectly!");
+    } catch (err: any) {
+      console.error("AI Generation Error:", err);
+      const backendError = err.response?.data?.error || err.response?.data?.message || err.message || "Failed to generate AI form architecture";
+      toast.error(backendError);
+    } finally {
+      clearInterval(interval);
+      setIsAIGenerating(false);
+    }
+  };
+
+  const handlePreviewFileUpload = async (qId: string, file: File) => {
+    setPreviewUploads(prev => ({ ...prev, [qId]: { name: file.name, url: "", loading: true } }))
+    try {
+      const res = await uploadFile(file)
+      setPreviewUploads(prev => ({ ...prev, [qId]: { name: file.name, url: res.url, loading: false } }))
+      toast.success(`File "${file.name}" provisioned successfully`)
+    } catch (err) {
+      toast.error("Failed to upload evidence package")
+      setPreviewUploads(prev => {
+        const next = { ...prev }
+        delete next[qId]
+        return next
+      })
+    }
+  }
+
+  const handleSimulatedSubmit = () => {
+    toast.success("Survey Simulation Success: Data provisioned to local sandbox")
+    setIsPreviewOpen(false)
+    setPreviewAnswers({})
+  }
+
+  return (
+    <div className="flex flex-col h-screen bg-app text-content overflow-hidden font-geist">
+      {/* Header */}
+      <header className="shrink-0 flex h-16 w-full items-center justify-between border-b border-panel bg-app px-6 z-20 relative">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/dashboard/forms-surveys")}
+            className="h-10 w-10 rounded-xl hover:bg-panel-hover text-content-muted transition-colors"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="h-8 w-px bg-white/10"></div>
+          <div className="flex items-center gap-3">
+            <LayoutGrid className="h-5 w-5 text-indigo-500" />
+            <div className="flex flex-col">
+              <input
+                type="text"
+                value={formTitle}
+                onChange={(e) => setFormTitle(e.target.value)}
+                className="bg-transparent text-sm font-black text-content border-none focus:ring-0 w-64 p-0 focus:outline-none"
+              />
+              <span className="text-[9px] font-bold text-content-muted uppercase tracking-widest flex items-center gap-1.5 mt-0.5">
+                {saveStatus === 'Saving...' ? <Loader2 className="h-2 w-2 animate-spin" /> : <Save className="h-2 w-2" />}
+                Draft Sync: {saveStatus}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsAIModalOpen(true)}
+            className="relative inline-flex h-10 overflow-hidden rounded-xl p-[2px] focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-50 group shadow-lg hover:shadow-purple-500/40 transition-all duration-300 hover:-translate-y-1"
+          >
+            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#ffffff_0%,#9333ea_50%,#ffffff_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <span className="inline-flex h-full w-full items-center justify-center rounded-[10px] bg-gradient-to-r from-purple-500 to-indigo-600 px-4 font-black text-white backdrop-blur-3xl transition-all text-xs">
+              <Zap className="me-2 h-4 w-4 text-white" /> AI Generate
+            </span>
+          </button>
+          <div className="h-6 w-px bg-white/10 mx-2"></div>
+          {(formId || generatedFormId) && (
+            <Button
+              variant="ghost"
+              onClick={() => setIsShareOpen(true)}
+              className="h-10 px-4 rounded-xl hover:bg-panel-hover text-content-muted text-xs font-bold transition-colors flex items-center gap-2"
+            >
+              <Share2 className="h-4 w-4" /> Share
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            onClick={() => setIsPreviewOpen(true)}
+            className="h-10 px-4 rounded-xl hover:bg-panel-hover text-content-muted text-xs font-bold transition-colors flex items-center gap-2"
+          >
+            <Eye className="h-4 w-4" /> Preview
+          </Button>
+          <Button
+            onClick={handlePublish}
+            disabled={isPublishing}
+            className="h-10 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black shadow-lg shadow-indigo-500/20 transition-all flex items-center gap-2"
+          >
+            {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Rocket className="h-4 w-4" />}
+            Publish Architecture
+          </Button>
+        </div>
+      </header>
+
+      <main className="flex-1 flex overflow-hidden">
+        {/* Left Sidebar - Library */}
+        <aside className="w-72 shrink-0 border-e border-panel bg-panel flex flex-col hidden md:flex z-10">
+          <div className="p-6 border-b border-panel bg-panel-hover">
+            <h3 className="text-[10px] font-black text-content-muted uppercase tracking-[0.2em]">Data Acquisition</h3>
+            <p className="text-xs text-content-muted mt-1 font-bold">Field Component Library</p>
+          </div>
+          <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+            <div className="grid grid-cols-1 gap-3">
+              {[
+                { type: 'short_text', label: 'Short Text', desc: 'Brief alphanumeric responses', icon: Type },
+                { type: 'long_text', label: 'Extended Text', desc: 'Detailed narrative feedback', icon: AlignLeft },
+                { type: 'multiple_choice', label: 'Multiple Choice', desc: 'Select from predefined options', icon: CircleDot },
+                { type: 'checkbox', label: 'Checkbox', desc: 'Multiple selection', icon: CheckSquare },
+                { type: 'linear_scale', label: 'Linear Scale', desc: 'Numerical rating (1-10)', icon: Star },
+                { type: 'file', label: 'File Provisioning', desc: 'Evidence & document upload', icon: Upload },
+              ].map((field) => (
+                <button
+                  key={field.type}
+                  onClick={() => addQuestion(field.type as QuestionType)}
+                  className="flex items-center gap-4 p-4 rounded-2xl border border-panel bg-app hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all text-start group"
+                >
+                  <div className="p-3 rounded-xl bg-panel-hover text-content-muted group-hover:text-indigo-400 group-hover:bg-indigo-500/10 transition-colors">
+                    <field.icon className="h-5 w-5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-black text-content group-hover:text-content">{field.label}</span>
+                    <span className="text-[9px] font-bold text-slate-600 mt-0.5">{field.desc}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Canvas */}
+        <section className="flex-1 flex flex-col relative overflow-y-auto custom-scrollbar bg-app" id="canvas-container">
+          <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+
+          <div className="w-full max-w-3xl mx-auto py-16 px-6 relative z-10 flex flex-col gap-6 pb-40">
+            {/* Title Block */}
+            <div
+              className={cn(
+                "rounded-3xl bg-panel p-10 shadow-2xl cursor-pointer transition-all duration-300 border-2",
+                activeId === 'title' ? "border-indigo-600 shadow-indigo-600/10" : "border-panel hover:border-panel-hover"
+              )}
+              onClick={() => setActiveId('title')}
+            >
+              <input
+                type="text"
+                value={formTitle}
+                onChange={(e) => setFormTitle(e.target.value)}
+                className="w-full bg-transparent text-4xl font-black text-content border-none focus:ring-0 p-0 mb-4 placeholder-slate-800 outline-none tracking-tight"
+                placeholder="Form Title"
+              />
+              <textarea
+                value={formDescription}
+                onChange={(e) => setFormDescription(e.target.value)}
+                className="w-full bg-transparent text-sm font-medium text-content-muted border-none focus:ring-0 p-0 resize-none outline-none custom-scrollbar min-h-[60px]"
+                placeholder="Elaborate on the purpose and context of this evaluation..."
+              />
+            </div>
+
+            {/* Questions List */}
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+              <SortableContext items={questions.map(q => q.id!)} strategy={verticalListSortingStrategy}>
+                <div className="flex flex-col gap-6 relative">
+                  <AnimatePresence>
+                    {questions.map((question) => (
+                      <motion.div key={question.id} layout initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+                        <QuestionCard
+                          question={question}
+                          isActive={activeId === question.id}
+                          isSelected={false}
+                          onSelect={() => { }}
+                          onActivate={setActiveId}
+                          onDelete={deleteQuestion}
+                          onUpdate={updateQuestion}
+                          onOpenProperties={() => setActiveId(question.id!)}
+                        />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </SortableContext>
+            </DndContext>
+
+            {/* Visual Placeholder for New Field */}
+            <div className="w-full h-24 border-2 border-dashed border-panel rounded-3xl flex items-center justify-center group hover:border-indigo-500/20 hover:bg-indigo-500/5 transition-all cursor-pointer" onClick={() => addQuestion('short_text')}>
+              <div className="flex items-center gap-3 text-slate-600 group-hover:text-indigo-400 transition-colors">
+                <Plus className="h-6 w-6" />
+                <span className="text-sm font-black uppercase tracking-widest">Append Data Node</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Right Sidebar - Properties */}
+        <aside className="w-80 shrink-0 border-s border-panel bg-panel flex flex-col hidden lg:flex z-10">
+          <div className="p-6 border-b border-panel flex items-center gap-3 bg-panel-hover">
+            <Settings className="h-4 w-4 text-indigo-500" />
+            <h3 className="text-[10px] font-black text-content uppercase tracking-widest">Property Inspector</h3>
+          </div>
+
+          {/* Tabs */}
+          <div className="p-4 border-b border-panel bg-panel-hover">
+            <div className="flex bg-app p-1 rounded-xl border border-panel">
+              <button
+                onClick={() => setSidebarTab('form')}
+                className={cn(
+                  "flex-1 py-2 px-3 rounded-lg text-[9px] font-black uppercase transition-all flex items-center justify-center gap-1.5",
+                  sidebarTab === 'form' ? "bg-indigo-600 text-white shadow-lg" : "text-content-muted hover:text-content-muted"
+                )}
+              >
+                ⚙️ Form Setup
+              </button>
+              <button
+                onClick={() => setSidebarTab('field')}
+                className={cn(
+                  "flex-1 py-2 px-3 rounded-lg text-[9px] font-black uppercase transition-all flex items-center justify-center gap-1.5",
+                  sidebarTab === 'field' ? "bg-indigo-600 text-white shadow-lg" : "text-content-muted hover:text-content-muted"
+                )}
+              >
+                🧩 Field Specs
+              </button>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+            {sidebarTab === 'form' ? (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={category}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-8"
+                >
+                  <div className="space-y-6">
+                    {/* Category Selector & Target Entities hidden for Quiz Builder */}
+                    {!taskId && (
+                      <>
+                        <div className="space-y-3">
+                          <Label className="text-[10px] uppercase font-black text-content-muted tracking-widest ms-1">Form Category</Label>
+                          <div className="flex bg-app p-1 rounded-xl border border-panel">
+                            <button
+                              onClick={() => handleCategoryChange("GENERAL")}
+                              className={cn(
+                                "flex-1 py-2 px-3 rounded-lg text-[9px] font-black uppercase transition-all",
+                                category === "GENERAL" ? "bg-indigo-600 text-white shadow-lg" : "text-content-muted hover:text-content-muted"
+                              )}
+                              disabled={!!taskId}
+                            >
+                              General
+                            </button>
+                            <button
+                              onClick={() => handleCategoryChange("SPECIALIZED")}
+                              className={cn(
+                                "flex-1 py-2 px-3 rounded-lg text-[9px] font-black uppercase transition-all",
+                                category === "SPECIALIZED" ? "bg-amber-500 text-white shadow-lg" : "text-content-muted hover:text-content-muted"
+                              )}
+                              disabled={!!taskId}
+                            >
+                              Academic
+                            </button>
+                            {category === "QUIZ" && (
+                              <button
+                                className="flex-1 py-2 px-3 rounded-lg text-[9px] font-black uppercase transition-all bg-emerald-500 text-white shadow-lg"
+                                disabled
+                              >
+                                Quiz Task
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        {category === "GENERAL" ? (
+                          <div className="space-y-6 animate-in fade-in slide-in-from-right-4">
+                            <div className="space-y-3">
+                              <Label className="text-[10px] uppercase font-black text-content-muted tracking-widest ms-1">Contextual Description</Label>
+                              <textarea
+                                value={formDescription}
+                                onChange={(e) => setFormDescription(e.target.value)}
+                                className="w-full bg-app border border-panel-hover text-content text-xs font-medium rounded-xl p-3 outline-none focus:border-indigo-500 transition-all min-h-[100px] resize-none custom-scrollbar"
+                                placeholder="Describe the purpose of this data collection..."
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            {subjectRole !== "FACILITY" && (
+                              <div className="space-y-3">
+                                <Label className={cn("text-[10px] uppercase font-black tracking-widest ms-1 transition-colors", validationErrors.department ? "text-red-400" : "text-content-muted")}>Academic Department</Label>
+                                <select
+                                  value={departmentId}
+                                  onChange={(e) => {
+                                    setDepartmentId(e.target.value);
+                                    if (e.target.value) setValidationErrors(prev => ({ ...prev, department: false }));
+                                  }}
+                                  className={cn(
+                                    "w-full bg-app border text-content text-xs font-bold rounded-xl p-3 outline-none transition-all focus:border-indigo-500",
+                                    validationErrors.department ? "border-eed-500/50" : "border-panel-hover"
+                                  )}
+                                >
+                                  <option value="">Select Target Entity</option>
+                                  {departments.map(dept => (
+                                    <option key={dept._id || dept.id} value={dept._id || dept.id}>{dept.name}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
+
+                            {/* Subject Entity Selection */}
+                            <div className="space-y-3">
+                              <Label className="text-[10px] uppercase font-black text-content-muted tracking-widest ms-1">Subject Entity</Label>
+                              <select
+                                value={subjectRole}
+                                onChange={(e) => {
+                                  setSubjectRole(e.target.value as FormRole);
+                                  setCourseId("");
+                                  setInstructorId("");
+                                  setFacilityId("");
+                                }}
+                                className="w-full bg-app border border-panel-hover text-content text-xs font-bold rounded-xl p-3 outline-none focus:border-indigo-500 transition-all"
+                              >
+                                <option value="DEPARTMENT">Department</option>
+                                <option value="COURSE">Course</option>
+                                <option value="INSTRUCTOR">Instructor</option>
+                                <option value="HOD">Head of Department</option>
+                                <option value="FACILITY">Facility</option>
+                              </select>
+                            </div>
+
+                            {/* 1. Cascading Logic: Select Course -> Select Instructor */}
+                            <AnimatePresence>
+                              {subjectRole === "COURSE" && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  className="space-y-6 overflow-hidden mt-4"
+                                >
+                                  <div className="space-y-3">
+                                    <Label className={cn("text-[10px] uppercase font-black tracking-widest ms-1 transition-colors", validationErrors.course ? "text-red-400" : "text-content-muted")}>Select Course</Label>
+                                    <div className="relative">
+                                      <select
+                                        value={courseId}
+                                        onChange={(e) => {
+                                          const newCourseId = e.target.value;
+                                          setCourseId(newCourseId);
+                                          const selectedCourse = courses.find(c => (c._id || c.id) === newCourseId);
+                                          const instId = selectedCourse?.instructorId
+                                            ? (typeof selectedCourse.instructorId === 'object' ? (selectedCourse.instructorId as any)._id || (selectedCourse.instructorId as any).id : selectedCourse.instructorId)
+                                            : null;
+
+                                          if (instId) {
+                                            setInstructorId(instId);
+                                            setValidationErrors(prev => ({ ...prev, course: false, instructor: false }));
+                                          } else {
+                                            setInstructorId("");
+                                            if (newCourseId) setValidationErrors(prev => ({ ...prev, course: false }));
+                                          }
+                                        }}
+                                        className={cn(
+                                          "w-full bg-panel-hover/80 text-content text-sm border rounded-lg p-2.5 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 appearance-none cursor-pointer transition-all",
+                                          validationErrors.course ? "border-eed-500/50 shadow-[0_0_10px_rgba(239,68,68,0.1)]" : "border-panel-hover"
+                                        )}
+                                      >
+                                        <option value="" disabled hidden>Choose Course...</option>
+                                        {courses.filter(c => {
+                                          if (!departmentId) return true;
+                                          const raw = c.departmentId || (c as any).department_id;
+                                          const cId = typeof raw === 'object' && raw !== null ? raw._id || raw.id : raw;
+                                          return cId === departmentId;
+                                        }).map(course => (
+                                          <option key={course._id || course.id} value={course._id || course.id}>{course.name}</option>
+                                        ))}
+                                      </select>
+                                      <ChevronDown className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content/40 pointer-events-none" />
+                                    </div>
+                                  </div>
+
+                                  <AnimatePresence>
+                                    {courseId && (
+                                      <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="space-y-3 overflow-hidden"
+                                      >
+                                        <Label className={cn("text-[10px] uppercase font-black tracking-widest ms-1 transition-colors", validationErrors.instructor ? "text-red-400" : "text-content-muted")}>Target Instructor</Label>
+                                        <div className="relative">
+                                          <select
+                                            value={instructorId}
+                                            onChange={(e) => {
+                                              setInstructorId(e.target.value);
+                                              if (e.target.value) setValidationErrors(prev => ({ ...prev, instructor: false }));
+                                            }}
+                                            className={cn(
+                                              "w-full bg-panel-hover/80 text-content text-sm border rounded-lg p-2.5 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 appearance-none cursor-pointer transition-all",
+                                              validationErrors.instructor ? "border-eed-500/50 shadow-[0_0_10px_rgba(239,68,68,0.1)]" : "border-panel-hover"
+                                            )}
+                                          >
+                                            <option value="" disabled hidden>Select Instructor...</option>
+                                            {(() => {
+                                              const selectedCourse = courses.find(c => (c._id || c.id) === courseId);
+                                              const instId = selectedCourse?.instructorId
+                                                ? (typeof selectedCourse.instructorId === 'object' ? (selectedCourse.instructorId as any)._id || (selectedCourse.instructorId as any).id : selectedCourse.instructorId)
+                                                : null;
+
+                                              const filteredInstructors = instId
+                                                ? instructors.filter(inst => ((inst as any)._id || inst.id) === instId)
+                                                : instructors;
+
+                                              return filteredInstructors.map(inst => (
+                                                <option key={(inst as any)._id || inst.id} value={(inst as any)._id || inst.id}>
+                                                  {inst.firstName} {inst.lastName}
+                                                </option>
+                                              ));
+                                            })()}
+                                          </select>
+                                          <ChevronDown className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content/40 pointer-events-none" />
+                                        </div>
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+
+                            {/* 2. Cascading Logic: Select Instructor Directly */}
+                            <AnimatePresence>
+                              {subjectRole === "INSTRUCTOR" && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  className="space-y-3 overflow-hidden mt-4"
+                                >
+                                  <Label className={cn("text-[10px] uppercase font-black tracking-widest ms-1 transition-colors", validationErrors.instructor ? "text-red-400" : "text-content-muted")}>
+                                    Target Instructor
+                                  </Label>
+                                  <div className="relative">
+                                    <select
+                                      value={instructorId}
+                                      onChange={(e) => {
+                                        setInstructorId(e.target.value);
+                                        if (e.target.value) setValidationErrors(prev => ({ ...prev, instructor: false }));
+                                      }}
+                                      className={cn(
+                                        "w-full bg-panel-hover/80 text-content text-sm border rounded-lg p-2.5 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 appearance-none cursor-pointer transition-all",
+                                        validationErrors.instructor ? "border-eed-500/50 shadow-[0_0_10px_rgba(239,68,68,0.1)]" : "border-panel-hover"
+                                      )}
+                                    >
+                                      <option value="" disabled hidden>Select Instructor...</option>
+                                      {instructors.filter(inst => {
+                                        // الفلترة الذكية: بنجيب الدكاترة اللي ليهم كورسات مربوطة بالقسم اللي اخترناه فوق
+                                        return courses.some(c => {
+                                          const cDept = typeof c.departmentId === 'object' ? (c.departmentId as any)._id || (c.departmentId as any).id : c.departmentId;
+                                          const cInst = typeof c.instructorId === 'object' ? (c.instructorId as any)._id || (c.instructorId as any).id : c.instructorId;
+                                          const instId = (inst as any)._id || inst.id;
+                                          return cDept === departmentId && cInst === instId;
+                                        });
+                                      }).map(inst => (
+                                        <option key={(inst as any)._id || inst.id} value={(inst as any)._id || inst.id}>
+                                          {inst.firstName} {inst.lastName}
+                                        </option>
+                                      ))}
+                                    </select>
+                                    <ChevronDown className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content/40 pointer-events-none" />
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+
+                            {/* 3. Cascading Logic: Select Facility */}
+                            <AnimatePresence>
+                              {subjectRole === "FACILITY" && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  className="space-y-3 overflow-hidden mt-4"
+                                >
+                                  <Label className={cn("text-[10px] uppercase font-black tracking-widest ms-1 transition-colors", validationErrors.facility ? "text-red-400" : "text-content-muted")}>
+                                    Target Facility
+                                  </Label>
+                                  <div className="relative">
+                                    <select
+                                      value={facilityId}
+                                      onChange={(e) => {
+                                        setFacilityId(e.target.value);
+                                        if (e.target.value) setValidationErrors(prev => ({ ...prev, facility: false }));
+                                      }}
+                                      className={cn(
+                                        "w-full bg-panel-hover/80 text-content text-sm border rounded-lg p-2.5 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 appearance-none cursor-pointer transition-all",
+                                        validationErrors.facility ? "border-eed-500/50 shadow-[0_0_10px_rgba(239,68,68,0.1)]" : "border-panel-hover"
+                                      )}
+                                    >
+                                      <option value="" disabled hidden>Select Facility...</option>
+                                      {facilities.map(f => (
+                                        <option key={f._id || f.id} value={f._id || f.id}>
+                                          {f.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                    <ChevronDown className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content/40 pointer-events-none" />
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+
+                            {subjectRole !== "FACILITY" && (
+                              <div className="space-y-3">
+                                <Label className="text-[10px] uppercase font-black text-content-muted tracking-widest ms-1">Evaluator Audience</Label>
+                                <div className="grid grid-cols-2 gap-2">
+                                  {["STUDENT", "INSTRUCTOR", "HOD"].map(role => (
+                                    <button
+                                      key={role}
+                                      onClick={() => toggleRole(role as FormRole)}
+                                      className={cn(
+                                        "px-3 py-2 rounded-lg text-[9px] font-black uppercase transition-all border",
+                                        evaluatorRoles.includes(role as FormRole)
+                                          ? "bg-indigo-600 border-indigo-500 text-content"
+                                          : "bg-app border-panel text-content-muted hover:text-content-muted"
+                                      )}
+                                    >
+                                      {role}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </>
+                    )}
+
+                    <div className="space-y-4 pt-4 border-t border-panel">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-content-muted">Anonymize Responses</span>
+                          <Tooltip text="Hides respondent identity from the instructor and analytics dashboard.">
+                            <Info className="h-3 w-3 text-slate-600 cursor-help hover:text-indigo-400 transition-colors" />
+                          </Tooltip>
+                        </div>
+                        <Switch checked={isAnonymous} onCheckedChange={setIsAnonymous} />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-content-muted">Availability Status</span>
+                          <Tooltip text="Controls whether the form is currently open for submissions.">
+                            <Info className="h-3 w-3 text-slate-600 cursor-help hover:text-indigo-400 transition-colors" />
+                          </Tooltip>
+                        </div>
+                        <Switch checked={isActive} onCheckedChange={setIsActive} />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            ) : sidebarTab === 'field' ? (
+              activeQuestion ? (
+                <div className="space-y-8 animate-in fade-in">
+                  <div className="p-4 rounded-2xl bg-app border border-panel flex flex-col gap-2">
+                    <span className="text-[9px] font-black text-slate-600 uppercase">Field Classification</span>
+                    <div className="flex items-center gap-3">
+                      <Lock className="h-3.5 w-3.5 text-indigo-500" />
+                      <span className="text-xs font-black text-content uppercase tracking-wider">{activeQuestion.type.replace('_', ' ')}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between p-4 rounded-2xl bg-panel-hover border border-panel">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-black text-content">Mandatory Data</span>
+                        <span className="text-[9px] font-bold text-slate-600 uppercase">Require field completion</span>
+                      </div>
+                      <Switch checked={activeQuestion.required} onCheckedChange={(val) => updateQuestion(activeQuestion.id!, { required: val })} />
+                    </div>
+
+                    {activeQuestion.type === "short_text" && (
+                      <div className="space-y-3">
+                        <Label className="text-[10px] uppercase font-black text-content-muted tracking-widest ms-1">Text Validation (Optional)</Label>
+                        <div className="relative">
+                          <select
+                            value={activeQuestion.text_validation?.type || "text"}
+                            onChange={(e) => updateQuestion(activeQuestion.id!, { text_validation: { type: e.target.value as any } })}
+                            className="w-full bg-panel-hover/80 text-content text-sm border border-panel-hover rounded-lg p-2.5 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 appearance-none cursor-pointer transition-all"
+                          >
+                            <option value="text">Free Text</option>
+                            <option value="email">Email Address</option>
+                            <option value="number">Numeric Value</option>
+                            <option value="phone">Phone Number</option>
+                            <option value="url">Website URL</option>
+                          </select>
+                          <ChevronDown className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content/40 pointer-events-none" />
+                        </div>
+                      </div>
+                    )}
+
+                    {activeQuestion.type === "linear_scale" && (
+                      <div className="space-y-3">
+                        <Label className="text-[10px] uppercase font-black text-content-muted tracking-widest ms-1">Scale Amplitude (1-10)</Label>
+                        <Input
+                          type="number" min={1} max={10}
+                          value={activeQuestion.scale?.max || 5}
+                          onChange={(e) => updateQuestion(activeQuestion.id!, { scale: { min: 1, max: Number(e.target.value) } })}
+                          className="bg-app border-panel-hover text-content h-11 rounded-xl font-black text-center"
+                        />
+                      </div>
+                    )}
+
+                    {(activeQuestion.type === "multiple_choice" || activeQuestion.type === "checkbox") && (
+                      <div className="space-y-4">
+                        <Label className="text-[10px] uppercase font-black text-content-muted tracking-widest ms-1">Choice Options</Label>
+                        <div className="space-y-2">
+                          {activeQuestion.options?.map((opt, idx) => (
+                            <div key={idx} className="flex gap-2">
+                              <Input
+                                value={opt}
+                                onChange={(e) => {
+                                  const next = [...(activeQuestion.options || [])]
+                                  next[idx] = e.target.value
+                                  updateQuestion(activeQuestion.id!, { options: next })
+                                }}
+                                className="bg-app border-panel-hover text-content h-9 rounded-lg text-xs"
+                              />
+                              <button
+                                onClick={() => updateQuestion(activeQuestion.id!, { options: activeQuestion.options?.filter((_, i) => i !== idx) })}
+                                className="p-2 text-slate-600 hover:text-red-400"
+                              >
+                                <X className="h-4 w-4" />
+                              </button>
+                            </div>
+                          ))}
+                          <Button
+                            variant="ghost" size="sm"
+                            onClick={() => updateQuestion(activeQuestion.id!, { options: [...(activeQuestion.options || []), `New Option`] })}
+                            className="w-full text-[9px] uppercase font-black tracking-widest text-indigo-500 hover:bg-indigo-500/5"
+                          >
+                            + Add New Path
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-8 border-t border-panel">
+                    <Button
+                      variant="ghost"
+                      onClick={() => deleteQuestion(activeId!)}
+                      className="w-full py-6 rounded-2xl border border-eed-500/20 bg-red-500/5 hover:bg-red-500/20 text-red-400 text-xs font-black transition-all flex items-center justify-center gap-3 uppercase tracking-widest"
+                    >
+                      <Trash2 className="h-4 w-4" /> Purge Data Point
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full text-center p-10 opacity-20">
+                  <AlertTriangle className="mx-auto h-8 w-8 mb-2" />
+                  <p className="text-[10px] font-black uppercase tracking-widest text-content-muted leading-relaxed">Select a question block on the canvas to inspect fields.</p>
+                </div>
+              )
+            ) : null}
+          </div>
+        </aside>
+      </main>
+
+      {/* ── PREVIEW MODAL ─────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {isPreviewOpen && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-app flex flex-col overflow-hidden"
+          >
+            <div className="h-16 border-b border-panel px-8 flex items-center justify-between bg-panel-hover">
+              <div className="flex items-center gap-6">
+                <span className="text-xs font-black uppercase tracking-widest text-indigo-500">Preview Engine v1.0</span>
+                <div className="flex bg-panel-hover rounded-xl p-1 gap-1">
+                  <button
+                    onClick={() => setIsPreviewMobile(false)}
+                    className={cn("p-2 rounded-lg transition-all", !isPreviewMobile ? "bg-indigo-600 text-white" : "text-content-muted hover:text-content")}
+                  >
+                    <Monitor className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => setIsPreviewMobile(true)}
+                    className={cn("p-2 rounded-lg transition-all", isPreviewMobile ? "bg-indigo-600 text-white" : "text-content-muted hover:text-content")}
+                  >
+                    <Smartphone className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+              <button onClick={() => setIsPreviewOpen(false)} className="p-2 rounded-full hover:bg-white/10 text-content-muted transition-colors">
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto bg-slate-100 dark:bg-app p-8 md:p-20 custom-scrollbar">
+              <div className={cn(
+                "mx-auto transition-all duration-500 ease-in-out",
+                isPreviewMobile ? "max-w-[375px] rounded-[3rem] border-[12px] border-[#1e1b2e] shadow-2xl h-[700px] overflow-y-auto custom-scrollbar bg-white dark:bg-panel" : "max-w-3xl"
+              )}>
+                <div className={cn("p-10 space-y-12", isPreviewMobile && "p-6")}>
+                  <div className="space-y-4">
+                    <h1 className={cn("font-black tracking-tight dark:text-content", isPreviewMobile ? "text-2xl" : "text-4xl")}>{formTitle}</h1>
+                    <p className="text-content-muted font-medium leading-relaxed">{formDescription}</p>
+                    <div className="h-1 w-20 bg-indigo-600 rounded-full"></div>
+                  </div>
+
+                  <div className="space-y-16">
+                    {questions.map((q, i) => (
+                      <div key={i} className="space-y-6">
+                        <div className="flex items-start gap-4">
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-500 text-sm font-black">{i + 1}</span>
+                          <h3 className="text-lg font-bold dark:text-content leading-snug">{q.label}{q.required && <span className="text-red-500 ms-1">*</span>}</h3>
+                        </div>
+
+                        <div className="ps-12">
+                          {q.type === 'short_text' && (
+                            <Input
+                              type={q.text_validation?.type === 'phone' ? 'tel' : (q.text_validation?.type || 'text')}
+                              value={previewAnswers[q._id || q.id!] || ""}
+                              onChange={(e) => setPreviewAnswers(prev => ({ ...prev, [q._id || q.id!]: e.target.value }))}
+                              placeholder={
+                                q.text_validation?.type === 'email' ? 'e.g., user@example.com' :
+                                q.text_validation?.type === 'number' ? 'e.g., 42' :
+                                q.text_validation?.type === 'phone' ? 'e.g., +123456789' :
+                                q.text_validation?.type === 'url' ? 'e.g., https://example.com' :
+                                'Short response text'
+                              }
+                              className="bg-transparent border-slate-300 dark:border-panel-hover"
+                            />
+                          )}
+                          {q.type === 'long_text' && (
+                            <textarea
+                              value={previewAnswers[q._id || q.id!] || ""}
+                              onChange={(e) => setPreviewAnswers(prev => ({ ...prev, [q._id || q.id!]: e.target.value }))}
+                              placeholder="Detailed narrative response"
+                              className="w-full bg-transparent border border-slate-300 dark:border-panel-hover rounded-xl p-4 min-h-[100px] text-sm focus:ring-indigo-500 outline-none transition-all"
+                            />
+                          )}
+                          {q.type === 'multiple_choice' && (
+                            <div className="space-y-3">
+                              {q.options?.map((opt, idx) => (
+                                <div
+                                  key={idx}
+                                  onClick={() => setPreviewAnswers(prev => ({ ...prev, [q._id || q.id!]: opt }))}
+                                  className={cn(
+                                    "flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer",
+                                    previewAnswers[q._id || q.id!] === opt
+                                      ? "border-indigo-500 bg-indigo-500/10 text-indigo-400"
+                                      : "border-slate-200 dark:border-panel bg-panel-hover0 dark:bg-panel-hover text-content-muted"
+                                  )}
+                                >
+                                  <div className={cn(
+                                    "h-4 w-4 rounded-full border-2 transition-all",
+                                    previewAnswers[q._id || q.id!] === opt ? "border-indigo-500 bg-indigo-500" : "border-slate-400 dark:border-white/20"
+                                  )}></div>
+                                  <span className="text-sm font-medium">{opt}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {q.type === 'checkbox' && (
+                            <div className="space-y-3">
+                              {q.options?.map((opt, idx) => {
+                                const qId = q._id || q.id!;
+                                const selectedOpts = (previewAnswers[qId] as string[]) || [];
+                                const isSelected = selectedOpts.includes(opt);
+                                return (
+                                  <div
+                                    key={idx}
+                                    onClick={() => {
+                                      setPreviewAnswers(prev => {
+                                        const current = (prev[qId] as string[]) || [];
+                                        const next = current.includes(opt) ? current.filter(o => o !== opt) : [...current, opt];
+                                        return { ...prev, [qId]: next };
+                                      })
+                                    }}
+                                    className={cn(
+                                      "flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer",
+                                      isSelected
+                                        ? "border-indigo-500 bg-indigo-500/10 text-indigo-400"
+                                        : "border-slate-200 dark:border-panel bg-panel-hover0 dark:bg-panel-hover text-content-muted"
+                                    )}
+                                  >
+                                    <div className={cn(
+                                      "h-4 w-4 rounded-sm border-2 transition-all flex items-center justify-center",
+                                      isSelected ? "border-indigo-500 bg-indigo-500" : "border-slate-400 dark:border-white/20"
+                                    )}>
+                                      {isSelected && <Check className="h-3 w-3 text-content" />}
+                                    </div>
+                                    <span className="text-sm font-medium">{opt}</span>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          )}
+                          {q.type === 'linear_scale' && (
+                            <div className="flex flex-col gap-4">
+                              <div className="flex justify-between text-[10px] font-black text-content-muted uppercase tracking-widest">
+                                <span>{q.scale?.min || 1} (Poor)</span>
+                                <span>{q.scale?.max || 5} (Excellent)</span>
+                              </div>
+                              <div className="flex gap-2">
+                                {Array.from({ length: (q.scale?.max || 5) }, (_, idx) => idx + 1).map(val => (
+                                  <div
+                                    key={val}
+                                    onClick={() => setPreviewAnswers(prev => ({ ...prev, [q._id || q.id!]: val }))}
+                                    className={cn(
+                                      "h-12 flex-1 flex items-center justify-center rounded-xl border text-sm font-black transition-all cursor-pointer",
+                                      previewAnswers[q._id || q.id!] === val
+                                        ? "border-indigo-500 bg-indigo-500/10 text-indigo-500"
+                                        : "border-slate-200 dark:border-panel-hover text-content-muted hover:border-indigo-500/50 hover:text-indigo-500"
+                                    )}
+                                  >
+                                    {val}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {q.type === 'file' && (
+                            <div className="space-y-4">
+                              <label className={cn(
+                                "border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer",
+                                previewUploads[q.id!]?.loading ? "border-indigo-500/50 bg-indigo-500/5" : "border-slate-300 dark:border-panel-hover hover:border-indigo-500/30",
+                                previewUploads[q.id!]?.url ? "border-emerald-500/30 bg-emerald-500/5" : ""
+                              )}>
+                                <input
+                                  type="file"
+                                  className="hidden"
+                                  onChange={(e) => e.target.files?.[0] && handlePreviewFileUpload(q.id!, e.target.files[0])}
+                                />
+                                {previewUploads[q.id!]?.loading ? (
+                                  <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+                                ) : previewUploads[q.id!]?.url ? (
+                                  <Check className="h-8 w-8 text-emerald-500" />
+                                ) : (
+                                  <Upload className="h-8 w-8 opacity-20" />
+                                )}
+                                <div className="text-center">
+                                  <span className="text-sm font-bold uppercase tracking-widest block dark:text-content">
+                                    {previewUploads[q.id!]?.loading ? "Uploading Evidence..." : previewUploads[q.id!]?.name || "Provision Evidence Package"}
+                                  </span>
+                                  {!previewUploads[q.id!]?.loading && (
+                                    <span className="text-[10px] text-content-muted font-bold uppercase mt-1 block">
+                                      {previewUploads[q.id!]?.url ? "File Ready for Submission" : "Click to select or drag & drop"}
+                                    </span>
+                                  )}
+                                </div>
+                              </label>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-10 border-t border-slate-200 dark:border-panel">
+                    <Button
+                      onClick={handleSimulatedSubmit}
+                      className="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20"
+                    >
+                      Finalize Submission
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── SHARE MODAL ──────────────────────────────────────────────────── */}
+      <Modal
+        open={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        title={
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-500">
+              <Share2 className="h-4 w-4" />
+            </div>
+            <span className="font-black text-content uppercase tracking-widest">Share Form</span>
+          </div>
+        }
+        size="sm"
+      >
+        <div className="space-y-8 py-4">
+          <div className="flex flex-col items-center text-center gap-6">
+            <div className="flex flex-col items-center gap-4">
+              <div className="p-4 rounded-3xl bg-white shadow-2xl shadow-indigo-500/10">
+                <QRCodeCanvas 
+                  id="qr-code-canvas" 
+                  value={shareUrl} 
+                  size={1024} 
+                  level="H" 
+                  includeMargin 
+                  style={{ width: 180, height: 180 }}
+                  imageSettings={{
+                    src: "/logo.svg",
+                    height: 228,
+                    width: 228,
+                    excavate: true,
+                  }}
+                />
+              </div>
+              <Button 
+                onClick={handleDownloadQR} 
+                variant="outline" 
+                size="sm" 
+                className="rounded-full px-6 font-bold text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/10"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download QR Code
+              </Button>
+            </div>
+            <div>
+              <h4 className="text-lg font-black text-content">Your Link is Ready</h4>
+              <p className="text-xs text-content-muted mt-1 font-medium">Anyone with this link can fill out the form and submit responses.</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <Label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ms-1">Share Link</Label>
+            <div className="relative group">
+              <Input
+                readOnly
+                value={shareUrl}
+                className="bg-app border-panel-hover text-indigo-400 h-12 pe-12 rounded-xl font-bold truncate focus:ring-indigo-500"
+              />
+              <button
+                onClick={handleCopyLink}
+                className="absolute end-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-panel-hover text-content-muted hover:text-content transition-all"
+              >
+                {isCopied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20 flex gap-3">
+            <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0" />
+            <p className="text-[10px] text-amber-500 font-bold leading-relaxed uppercase tracking-wider">
+              Anyone with this link will be able to access the form. Please ensure you are sharing it with the correct audience.
+            </p>
+          </div>
+        </div>
+      </Modal>
+
+      {/* AI Generate Prompt Modal */}
+      <Modal
+        open={isAIModalOpen}
+        onClose={() => !isAIGenerating && setIsAIModalOpen(false)}
+        title={
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 animate-pulse">
+              <Zap className="h-4 w-4 text-purple-400" />
+            </div>
+            <span className="font-black text-content uppercase tracking-widest">AI Form Synthesizer</span>
+          </div>
+        }
+        size="md"
+      >
+        <div className="relative overflow-hidden font-geist py-2">
+          {isAIGenerating ? (
+            <div className="py-12 flex flex-col items-center justify-center gap-6 animate-in fade-in duration-500">
+              <div className="relative">
+                <div className="h-20 w-20 rounded-full border border-purple-500/20 flex items-center justify-center bg-purple-500/5">
+                  <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
+                </div>
+                <div className="absolute -top-1 -end-1 p-1.5 rounded-full bg-purple-500 text-white animate-bounce">
+                  <Zap className="h-3.5 w-3.5" />
+                </div>
+              </div>
+              <div className="space-y-2 text-center">
+                <h4 className="text-sm font-black text-content uppercase tracking-widest animate-pulse">
+                  Synthesizing Architecture...
+                </h4>
+                <p className="text-xs text-indigo-400 font-bold">
+                  {[
+                    "Analyzing layout requirements...",
+                    "Structuring cognitive evaluation metrics...",
+                    "Synthesizing customized academic questions...",
+                    "Enforcing structural type integrity...",
+                    "Finalizing dynamic builder components..."
+                  ][aiStep]}
+                </p>
+              </div>
+            </div>
+          ) : (
+              <div className="space-y-6 animate-in fade-in duration-300">
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-content-muted ms-1">Source File (Optional)</Label>
+                  <input
+                    type="file"
+                    accept=".pdf,.pptx,.ppt"
+                    onChange={(e) => setAiFile(e.target.files?.[0] || null)}
+                    className="w-full bg-app border border-panel-hover text-content text-sm font-medium rounded-2xl p-4 outline-none focus:border-purple-500 transition-all shadow-inner file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-purple-500/10 file:text-purple-400 hover:file:bg-purple-500/20 cursor-pointer"
+                  />
+                  <p className="text-xs text-content-muted ms-1 mt-1">Upload a PDF or PPTX to generate a quiz directly from its content.</p>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-content-muted ms-1">Generation Prompt (Optional if File is uploaded)</Label>
+                  <textarea
+                    value={aiPrompt}
+                    onChange={(e) => setAiPrompt(e.target.value)}
+                    className="w-full h-32 bg-app border border-panel-hover text-content text-sm font-medium rounded-2xl p-4 outline-none focus:border-purple-500 transition-all resize-none custom-scrollbar shadow-inner"
+                    placeholder="Describe what kind of evaluation or survey you want to generate. e.g., 'Generate an evaluation for a programming course with practical assignments, rating their instructor and code quality...'"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-content-muted ms-1">Output Language</Label>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setAiLanguage("English")} 
+                      className={cn("flex-1 h-12 rounded-xl font-bold transition-all", aiLanguage === "English" ? "bg-purple-500/10 text-purple-400 border-purple-500/30" : "border-panel-hover text-content-muted hover:text-content")}
+                    >
+                      English
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setAiLanguage("Arabic")} 
+                      className={cn("flex-1 h-12 rounded-xl font-bold transition-all", aiLanguage === "Arabic" ? "bg-purple-500/10 text-purple-400 border-purple-500/30" : "border-panel-hover text-content-muted hover:text-content")}
+                    >
+                      العربية (Arabic)
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 justify-end pt-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsAIModalOpen(false)}
+                  className="h-12 px-6 rounded-xl hover:bg-panel-hover text-content-muted hover:text-content font-bold text-xs"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleAIGenerate}
+                  className="h-12 px-8 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 text-content font-black text-xs shadow-xl shadow-purple-500/20 transition-all flex items-center gap-2"
+                >
+                  <Zap className="h-4 w-4" /> Synthesize Survey
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2d2a42; border-eadius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+      `}</style>
+    </div>
+  )
+}

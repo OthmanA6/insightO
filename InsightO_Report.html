@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InsightO — خطة العمل والنموذج المالي 2026</title>
+  <meta name="description"
+    content="خطة العمل والنموذج المالي الشامل لمنصة InsightO SaaS لتقييم الأداء الأكاديمي بالذكاء الاصطناعي" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #0a0e1a;
+      --bg-card: #111827;
+      --bg-card2: #161f30;
+      --bg-card3: #0f1923;
+      --accent-blue: #1e6fb2;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #7c3aed;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-accent: rgba(30, 111, 178, 0.4);
+      --glow-blue: rgba(30, 111, 178, 0.15);
+      --glow-cyan: rgba(6, 182, 212, 0.15);
+      --glow-purple: rgba(124, 58, 237, 0.15);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Cairo', 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      direction: rtl;
+      overflow-x: hidden;
+    }
+
+    /* ===== NOISE OVERLAY ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ===== TOP NAVBAR ===== */
+    .topnav {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 60px;
+      background: rgba(10, 14, 26, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      gap: 1rem;
+    }
+
+    /* Progress bar at very top */
+    .topnav::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+      width: var(--scroll-progress, 0%);
+      transition: width 0.1s linear;
+    }
+
+    .topnav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .topnav-logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .topnav-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .topnav-name {
+      font-size: 1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.01em;
+    }
+
+    .topnav-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .topnav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex: 1;
+      justify-content: center;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .topnav-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .topnav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      letter-spacing: 0.01em;
+    }
+
+    .topnav-link:hover {
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .topnav-link.active {
+      color: var(--text-primary);
+      background: rgba(30, 111, 178, 0.12);
+      border-color: rgba(30, 111, 178, 0.3);
+    }
+
+    .topnav-link .nav-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .topnav-link.active .nav-dot {
+      background: var(--accent-cyan);
+      box-shadow: 0 0 6px var(--accent-cyan);
+    }
+
+    .topnav-section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      letter-spacing: 0.05em;
+    }
+
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      margin-right: 0;
+      margin-top: 60px;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== HERO / COVER ===== */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 5rem 5rem 5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: -200px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(30, 111, 178, 0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      right: 10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cover-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(30, 111, 178, 0.15);
+      border: 1px solid var(--border-accent);
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .cover-tag::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+      }
+    }
+
+    .cover-title {
+      font-size: clamp(3.5rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 1.05;
+      background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 40%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .cover-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      max-width: 600px;
+      line-height: 1.8;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .cover-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .cover-meta-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .cover-meta-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .cover-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* ===== PAGE SECTIONS ===== */
+    .page-section {
+      min-height: 100vh;
+      padding: 5rem 5rem 5rem 3rem;
+      position: relative;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-number {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-number::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border-accent), transparent);
+      max-width: 80px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .section-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      max-width: 700px;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-accent);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .card-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .card-value small {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-right: 0.25rem;
+    }
+
+    /* ===== GRID LAYOUTS ===== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .grid-auto {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* ===== TABLE STYLES ===== */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .data-table th {
+      background: rgba(30, 111, 178, 0.15);
+      color: var(--accent-cyan);
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.85rem 1.25rem;
+      text-align: right;
+      border-bottom: 2px solid var(--border-accent);
+    }
+
+    .data-table td {
+      padding: 0.85rem 1.25rem;
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .data-table .total-row td {
+      background: rgba(30, 111, 178, 0.08);
+      font-weight: 800;
+      color: var(--accent-cyan);
+      border-top: 1px solid var(--border-accent);
+    }
+
+    .table-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .table-title {
+      padding: 1.25rem 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* ===== STAT PILL ===== */
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent-emerald);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+    }
+
+    .stat-pill.negative {
+      background: rgba(244, 63, 94, 0.12);
+      border-color: rgba(244, 63, 94, 0.3);
+      color: var(--accent-rose);
+    }
+
+    .stat-pill.neutral {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: var(--accent-amber);
+    }
+
+    /* ===== HIGHLIGHT BOX ===== */
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(30, 111, 178, 0.1), rgba(6, 182, 212, 0.05));
+      border: 1px solid rgba(30, 111, 178, 0.3);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .highlight-box .hl-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-cyan);
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-box .hl-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    /* ===== LIST ===== */
+    .styled-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .styled-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .styled-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.6rem;
+    }
+
+    .styled-list li strong {
+      color: var(--text-primary);
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 50px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 50px;
+      transition: width 1s ease;
+    }
+
+    /* ===== CASH FLOW TIMELINE ===== */
+    .cf-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .cf-table th {
+      background: rgba(30, 111, 178, 0.12);
+      color: var(--accent-cyan);
+      font-weight: 700;
+      padding: 0.7rem 0.6rem;
+      text-align: center;
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+    }
+
+    .cf-table th:first-child {
+      text-align: right;
+    }
+
+    .cf-table td {
+      padding: 0.65rem 0.6rem;
+      text-align: center;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .cf-table td:first-child {
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .cf-table .cf-revenue {
+      color: var(--accent-emerald);
+    }
+
+    .cf-table .cf-cost {
+      color: var(--accent-rose);
+    }
+
+    .cf-table .cf-net-pos {
+      color: var(--accent-emerald);
+      font-weight: 700;
+    }
+
+    .cf-table .cf-net-neg {
+      color: var(--accent-rose);
+      font-weight: 700;
+    }
+
+    .cf-table .cf-balance {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .cf-table .cf-header-row td {
+      background: rgba(30, 111, 178, 0.07);
+      font-weight: 700;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 2rem 0;
+    }
+
+    /* ===== RISK ITEMS ===== */
+    .risk-item {
+      display: flex;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .risk-item:hover {
+      border-color: rgba(244, 63, 94, 0.3);
+      background: rgba(244, 63, 94, 0.03);
+    }
+
+    .risk-num {
+      width: 32px;
+      height: 32px;
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--accent-rose);
+      flex-shrink: 0;
+    }
+
+    .risk-content strong {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .risk-content p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ===== FOOTER ===== */
+    .report-footer {
+      padding: 2rem 5rem 2rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== SECTION BG VARIANTS ===== */
+    .page-section:nth-child(even) {
+      background: rgba(255, 255, 255, 0.008);
+    }
+
+    /* ===== GLOW ACCENTS ===== */
+    .glow-cyan {
+      color: var(--accent-cyan);
+    }
+
+    .glow-emerald {
+      color: var(--accent-emerald);
+    }
+
+    .glow-rose {
+      color: var(--accent-rose);
+    }
+
+    .glow-amber {
+      color: var(--accent-amber);
+    }
+
+    .glow-purple {
+      color: var(--accent-purple);
+    }
+
+    /* ===== BADGE ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-blue {
+      background: rgba(30, 111, 178, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+
+    .badge-cyan {
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-rose {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--accent-rose);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    /* ===== WATERFALL ===== */
+    .waterfall {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      height: 180px;
+      padding: 1rem 0 0;
+    }
+
+    .wf-bar {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.4rem;
+    }
+
+    .wf-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .wf-fill {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      transition: height 1s ease;
+      min-height: 4px;
+    }
+
+    .wf-value {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-align: center;
+      margin-top: -20px;
+      position: relative;
+      bottom: 0;
+      padding-bottom: 4px;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .fade-up-1 {
+      animation-delay: 0.1s;
+      opacity: 0;
+    }
+
+    .fade-up-2 {
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+
+    .fade-up-3 {
+      animation-delay: 0.3s;
+      opacity: 0;
+    }
+
+    .fade-up-4 {
+      animation-delay: 0.4s;
+      opacity: 0;
+    }
+
+    .fade-up-5 {
+      animation-delay: 0.5s;
+      opacity: 0;
+    }
+
+    /* ===== BREAK-EVEN CARDS ===== */
+    .be-zone {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .be-zone::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .be-zone.loss::before {
+      background: var(--accent-rose);
+    }
+
+    .be-zone.target::before {
+      background: var(--accent-amber);
+    }
+
+    .be-zone.full::before {
+      background: var(--accent-emerald);
+    }
+
+    .be-zone-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .be-zone.loss .be-zone-label {
+      color: var(--accent-rose);
+    }
+
+    .be-zone.target .be-zone-label {
+      color: var(--accent-amber);
+    }
+
+    .be-zone.full .be-zone-label {
+      color: var(--accent-emerald);
+    }
+
+    .be-zone-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .be-zone-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .topnav-links {
+        gap: 0.1rem;
+      }
+
+      .topnav-link {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+      }
+
+      .page-section,
+      .cover {
+        padding: 4rem 2rem;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+
+      .grid-2,
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .cover-title {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== TOP NAVBAR ===== -->
+  <nav class="topnav" id="topnav">
+    <!-- Brand -->
+    <a href="#cover" class="topnav-brand">
+      <div class="topnav-logo"><img src="splash-icon.png" alt="InsightO Logo" /></div>
+      <span class="topnav-name">InsightO</span>
+    </a>
+
+    <div class="topnav-divider"></div>
+
+    <!-- Nav Links -->
+    <div class="topnav-links">
+      <a href="#cover" class="topnav-link active" id="nav-cover">
+        <span class="nav-dot"></span>الغلاف
+      </a>
+      <a href="#section-summary" class="topnav-link" id="nav-summary">
+        <span class="nav-dot"></span>الملخص
+      </a>
+      <a href="#section-revenue" class="topnav-link" id="nav-revenue">
+        <span class="nav-dot"></span>الإيرادات
+      </a>
+      <a href="#section-cogs" class="topnav-link" id="nav-cogs">
+        <span class="nav-dot"></span>COGS
+      </a>
+      <a href="#section-opex" class="topnav-link" id="nav-opex">
+        <span class="nav-dot"></span>OpEx
+      </a>
+      <a href="#section-capex" class="topnav-link" id="nav-capex">
+        <span class="nav-dot"></span>CapEx
+      </a>
+      <a href="#section-unit" class="topnav-link" id="nav-unit">
+        <span class="nav-dot"></span>Unit Economics
+      </a>
+      <a href="#section-breakeven" class="topnav-link" id="nav-breakeven">
+        <span class="nav-dot"></span>التعادل
+      </a>
+      <a href="#section-cashflow" class="topnav-link" id="nav-cashflow">
+        <span class="nav-dot"></span>التدفق النقدي
+      </a>
+      <a href="#section-risks" class="topnav-link" id="nav-risks">
+        <span class="nav-dot"></span>المخاطر
+      </a>
+    </div>
+
+    <div class="topnav-divider"></div>
+    <span class="topnav-section-label">2026</span>
+  </nav>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+
+    <!-- ===== COVER ===== -->
+    <section class="cover" id="cover">
+      <div class="cover-grid"></div>
+      <div class="cover-tag fade-up fade-up-1">SaaS • EdTech • MENA • 2026</div>
+      <h1 class="cover-title fade-up fade-up-2">InsightO</h1>
+      <p class="cover-subtitle fade-up fade-up-3">
+        خطة العمل والنموذج المالي الشامل (B2B &amp; B2C)<br />
+        منصة SaaS لتقييم الأداء الأكاديمي بالذكاء الاصطناعي
+      </p>
+      <div class="cover-meta fade-up fade-up-4">
+        <div class="cover-meta-item">
+          <span class="cover-meta-label">إعداد</span>
+          <span class="cover-meta-value"> فريق InsightO</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="cover-meta-label">نوع المنتج</span>
+          <span class="cover-meta-value">SaaS</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="cover-meta-label">السوق المستهدف</span>
+          <span class="cover-meta-value">MENA — مصر أولاً</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="cover-meta-label">الإصدار</span>
+          <span class="cover-meta-value">2026</span>
+        </div>
+      </div>
+      <div
+        style="position:absolute; bottom:2.5rem; left:3rem; font-size:0.7rem; color:var(--text-muted); font-style:italic;">
+        جميع الأرقام افتراضية لأغراض التخطيط — تُستبدل بأرقام فعلية عند توفرها
+      </div>
+    </section>
+
+
+    <!-- ===== S1: EXECUTIVE SUMMARY + CHANGES ===== -->
+    <section class="page-section" id="section-summary">
+      <div class="section-number">S01</div>
+      <h2 class="section-title">الملخص التنفيذي</h2>
+      <p class="section-desc">نظرة عامة على المشروع والسوق المستهدف خلال السنة الأولى.</p>
+
+      <div class="grid-2" style="margin-bottom:2rem;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-label">عن المنصة</div>
+              <div class="card-title">نظرة عامة على المشروع</div>
+            </div>
+            <div class="card-icon" style="background:var(--glow-blue);">🧠</div>
+          </div>
+          <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.8;">
+            <strong style="color:var(--text-primary);">InsightO</strong> هي منصة SaaS مؤسسية تعتمد على تقنيات MERN Stack
+            وReact Native، تهدف إلى رقمنة تقييم الأداء الأكاديمي للمعلمين والمؤسسات التعليمية باستخدام الذكاء الاصطناعي.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-label">السوق المستهدف — السنة الأولى</div>
+              <div class="card-title">Beachhead Strategy</div>
+            </div>
+            <div class="card-icon" style="background:var(--glow-cyan);">🎯</div>
+          </div>
+          <ul class="styled-list" style="margin-top:0.5rem;">
+            <li><strong>النطاق الجغرافي:</strong> سوق EdTech في MENA — مصر بوابة الدخول الأولى</li>
+            <li><strong>هدف B2B:</strong> 4 مؤسسات أكاديمية (Standard + Pro)</li>
+            <li><strong>هدف B2C:</strong> 500 معلم/مدرب مستقل (Standard + Pro)</li>
+          </ul>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ===== S2: REVENUE MODEL ===== -->
+    <section class="page-section" id="section-revenue">
+      <div class="section-number">S02</div>
+      <h2 class="section-title">نموذج الإيرادات والتسعير</h2>
+      <p class="section-desc">تفصيل الباقات والأسعار وأهداف الاشتراك بنهاية السنة الأولى.</p>
+
+      <div class="table-wrapper" style="margin-bottom:1.5rem;">
+        <div class="table-title">📊 جدول الإيرادات المستهدفة — نهاية السنة الأولى</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>الشريحة</th>
+              <th>الباقة</th>
+              <th>السعر الشهري (EGP)</th>
+              <th>الهدف (نهاية السنة الأولى)</th>
+              <th>الإيراد الشهري عند تحقق الهدف</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-blue">B2C — الأفراد</span></td>
+              <td>Standard</td>
+              <td>500 ج.م</td>
+              <td>350 مستخدم</td>
+              <td class="glow-emerald"><strong>175,000 ج.م</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">B2C — الأفراد</span></td>
+              <td>Pro</td>
+              <td>1,100 ج.م</td>
+              <td>150 مستخدم</td>
+              <td class="glow-emerald"><strong>165,000 ج.م</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-cyan">B2B — المؤسسات</span></td>
+              <td>Standard</td>
+              <td>6,500 ج.م</td>
+              <td>3 مؤسسات</td>
+              <td class="glow-emerald"><strong>19,500 ج.م</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-cyan">B2B — المؤسسات</span></td>
+              <td>Pro</td>
+              <td>9,000 ج.م</td>
+              <td>1 مؤسسة</td>
+              <td class="glow-emerald"><strong>9,000 ج.م</strong></td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="4"><strong>الإجمالي المستهدف (إيراد دوري شهري MRR)</strong></td>
+              <td><strong>368,500 ج.م / شهر</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label" style="margin-bottom:0.75rem;">💡 MRR المستهدف — نهاية السنة الأولى</div>
+          <div class="card-value">368,500 <small>ج.م/شهر</small></div>
+          <div class="progress-bar" style="margin-top:1rem;">
+            <div class="progress-fill"
+              style="width:100%; background:linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));"></div>
+          </div>
+          <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.75rem;">الهدف السنوي الدوري المستهدف — ARR
+            يساوي ~4.42 مليون ج.م</p>
+        </div>
+        <div class="card">
+          <div class="card-label" style="margin-bottom:1rem;">توزيع الإيراد حسب الشريحة</div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;">
+                <span style="font-size:0.82rem;color:var(--text-secondary);">B2C (Standard + Pro)</span>
+                <span style="font-size:0.82rem;font-weight:700;color:#60a5fa;">340,000 ج.م <span
+                    style="color:var(--text-muted);">(92.3%)</span></span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:92.3%; background:linear-gradient(90deg, #3b82f6, #60a5fa);">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;">
+                <span style="font-size:0.82rem;color:var(--text-secondary);">B2B (Standard + Pro)</span>
+                <span style="font-size:0.82rem;font-weight:700;color:var(--accent-cyan);">28,500 ج.م <span
+                    style="color:var(--text-muted);">(7.7%)</span></span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill"
+                  style="width:7.7%; background:linear-gradient(90deg, var(--accent-cyan), #a5f3fc);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== S3: COGS ===== -->
+    <section class="page-section" id="section-cogs">
+      <div class="section-number">S03</div>
+      <h2 class="section-title">تكاليف البنية التحتية التقنية (COGS)</h2>
+      <p class="section-desc">مُقسَّمة إلى جزء ثابت وجزء متغير يتدرج مع نمو عدد المستخدمين.</p>
+
+      <div class="table-wrapper" style="margin-bottom:1.5rem;">
+        <div class="table-title">تفصيل بنود COGS الشهرية</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>مزود الخدمة</th>
+              <th>الاستخدام</th>
+              <th>طبيعة التكلفة</th>
+              <th>التكلفة الشهرية عند الاستهداف</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>استضافة وقواعد بيانات</strong></td>
+              <td style="color:var(--text-secondary);">API Servers + MongoDB Atlas</td>
+              <td><span class="badge badge-blue">شبه ثابتة</span></td>
+              <td class="glow-amber"><strong>4,000 ج.م</strong></td>
+            </tr>
+            <tr>
+              <td><strong>OpenAI API</strong></td>
+              <td style="color:var(--text-secondary);">تحليل الإجابات والبيانات المعقدة</td>
+              <td><span class="badge badge-rose">متغيرة بالكامل</span></td>
+              <td class="glow-amber"><strong>10,000 ج.م</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Firebase (Blaze)</strong></td>
+              <td style="color:var(--text-secondary);">رسائل OTP (SMS) و Cloud Functions</td>
+              <td><span class="badge badge-emerald">ثابتة تقريبًا</span></td>
+              <td class="glow-amber"><strong>2,000 ج.م</strong></td>
+            </tr>
+            <tr>
+              <td><strong>خدمات مساعدة</strong></td>
+              <td style="color:var(--text-secondary);">SMTP للإيميلات + Expo EAS للموبايل</td>
+              <td><span class="badge badge-emerald">ثابتة تقريبًا</span></td>
+              <td class="glow-amber"><strong>2,000 ج.م</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-3">
+        <div class="highlight-box">
+          <div class="hl-label">الجزء الثابت من COGS (حد أدنى)</div>
+          <div class="hl-value">6,000 <small
+              style="font-size:0.9rem;font-weight:500;color:var(--text-secondary);">ج.م</small></div>
+        </div>
+        <div class="highlight-box"
+          style="background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02));border-color:rgba(245,158,11,0.25);">
+          <div class="hl-label" style="color:var(--accent-amber);">الجزء المتغير عند تحقق الاستهداف</div>
+          <div class="hl-value">12,000 <small
+              style="font-size:0.9rem;font-weight:500;color:var(--text-secondary);">ج.م</small></div>
+        </div>
+        <div class="highlight-box"
+          style="background:linear-gradient(135deg,rgba(244,63,94,0.08),rgba(244,63,94,0.02));border-color:rgba(244,63,94,0.25);">
+          <div class="hl-label" style="color:var(--accent-rose);">إجمالي COGS عند الاستهداف الكامل</div>
+          <div class="hl-value">18,000 <small
+              style="font-size:0.9rem;font-weight:500;color:var(--text-secondary);">ج.م</small></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== S4: OPEX ===== -->
+    <section class="page-section" id="section-opex">
+      <div class="section-number">S04</div>
+      <h2 class="section-title">المصاريف التشغيلية (OpEx — Lean Startup)</h2>
+      <p class="section-desc">التكاليف التشغيلية الشهرية خارج البنية التحتية التقنية — نموذج Lean يعتمد على Sweat Equity
+        من المؤسسين.</p>
+
+      <div class="table-wrapper" style="margin-bottom:1.5rem;">
+        <div class="table-title">📈 جدول المصاريف التشغيلية الشهرية</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>البند</th>
+              <th>الوصف</th>
+              <th>التكلفة الشهرية (EGP)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>رواتب المؤسسين</strong></td>
+              <td style="color:var(--text-secondary);">Sweat Equity — العمل بدون راتب حتى تحقيق الاستدامة</td>
+              <td><span class="stat-pill">0 ج.م ✓</span></td>
+            </tr>
+            <tr>
+              <td><strong>التسويق والإعلانات</strong></td>
+              <td style="color:var(--text-secondary);">حملات لاستهداف المدربين والمؤسسات</td>
+              <td class="glow-amber"><strong>15,000 ج.م</strong></td>
+            </tr>
+            <tr>
+              <td><strong>برامج واشتراكات</strong></td>
+              <td style="color:var(--text-secondary);">أدوات تطوير، تصميم، ومحاسبة</td>
+              <td class="glow-amber"><strong>1,500 ج.م</strong></td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="2"><strong>إجمالي التكاليف الثابتة الشهرية (OpEx)</strong></td>
+              <td><strong>16,500 ج.م</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card"
+        style="background:linear-gradient(135deg,rgba(16,185,129,0.06),rgba(6,182,212,0.04));border-color:rgba(16,185,129,0.2);">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.5rem;">💡</span>
+          <span style="font-size:0.85rem;font-weight:700;color:var(--accent-emerald);">ميزة Lean Startup</span>
+        </div>
+        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.8;">
+          اعتماد نموذج Sweat Equity يُقلّل OpEx إلى <strong style="color:var(--text-primary);">16,500 ج.م/شهر</strong>
+          فقط مقارنةً بـ &gt;100,000 ج.م في الشركات التقليدية — مما يمنح المشروع
+          احتياطيًا ماليًا أطول ومرونة أكبر في التوسع عند تحقيق الإيرادات.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ===== S5: CAPEX ===== -->
+    <section class="page-section" id="section-capex">
+      <div class="section-number">S05</div>
+      <h2 class="section-title">المصاريف الرأسمالية والتأسيسية (CapEx)</h2>
+      <p class="section-desc">تكاليف تُدفع مرة واحدة عند التأسيس — تشمل الأجهزة والبرامج والتراخيص والإجراءات القانونية.
+      </p>
+
+      <div class="table-wrapper" style="margin-bottom:1.5rem;">
+        <div class="table-title">🏗️ تفصيل رأس المال التأسيسي المطلوب</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>البند</th>
+              <th>التكلفة (EGP) — تُدفع مرة واحدة</th>
+              <th>النسبة من الإجمالي</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>أجهزة وبرامج المطورين</strong> <span
+                  style="color:var(--text-muted);font-size:0.78rem;">(Laptops & Dev Tools)</span></td>
+              <td class="glow-amber"><strong>80,000 ج.م</strong></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                  <span class="stat-pill neutral">82.9%</span>
+                  <div class="progress-bar" style="flex:1;min-width:60px;">
+                    <div class="progress-fill" style="width:82.9%;background:var(--accent-amber);"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>حسابات متاجر التطبيقات</strong> <span
+                  style="color:var(--text-muted);font-size:0.78rem;">(Apple + Google)</span></td>
+              <td>6,500 ج.م</td>
+              <td><span class="stat-pill neutral">6.7%</span></td>
+            </tr>
+            <tr>
+              <td><strong>التأسيس القانوني والنطاق</strong> <span
+                  style="color:var(--text-muted);font-size:0.78rem;">(Domain + SSL)</span></td>
+              <td>10,000 ج.م</td>
+              <td><span class="stat-pill neutral">10.4%</span></td>
+            </tr>
+            <tr class="total-row">
+              <td><strong>إجمالي رأس المال التأسيسي المطلوب</strong></td>
+              <td><strong>96,500 ج.م</strong></td>
+              <td><strong>100%</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2">
+        <div class="highlight-box">
+          <div class="hl-label">رأس المال الابتدائي (ذاتي — من المؤسسين)</div>
+          <div class="hl-value">150,000 <small style="font-size:0.9rem;color:var(--text-secondary);">ج.م</small></div>
+        </div>
+        <div class="highlight-box"
+          style="background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.02));border-color:rgba(16,185,129,0.3);">
+          <div class="hl-label" style="color:var(--accent-emerald);">الرصيد الافتتاحي للتشغيل (بعد CapEx)</div>
+          <div class="hl-value" style="color:var(--accent-emerald);">53,500 <small
+              style="font-size:0.9rem;color:var(--text-secondary);">ج.م</small></div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">150,000 − 99,000 = 53,500 ج.م رصيد
+            تشغيلي مبدئي</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== S6: UNIT ECONOMICS ===== -->
+    <section class="page-section" id="section-unit">
+      <div class="section-number">S06</div>
+      <h2 class="section-title">اقتصاديات الوحدة (Unit Economics)</h2>
+      <p class="section-desc">تقدير CAC وLTV ونسبة LTV:CAC لكل شريحة مع بيان
+        الافتراضات بوضوح.</p>
+
+      <div class="table-wrapper" style="margin-bottom:1.5rem;">
+        <div class="table-title">📐 مقارنة Unit Economics بين الشريحتين</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>المؤشر</th>
+              <th>B2C (الأفراد)</th>
+              <th>B2B (المؤسسات)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>تكلفة الاستحواذ (CAC)</strong></td>
+              <td>≈ 286 ج.م / مستخدم</td>
+              <td>≈ 9,000 ج.م / مؤسسة</td>
+            </tr>
+            <tr>
+              <td><strong>معدل التسرب (Churn) — افتراضي</strong></td>
+              <td><span class="stat-pill negative">8% شهريًا</span></td>
+              <td><span class="stat-pill neutral">4% شهريًا</span></td>
+            </tr>
+            <tr>
+              <td><strong>متوسط عمر العميل — افتراضي</strong></td>
+              <td>≈ 12 شهرًا</td>
+              <td>≈ 24 شهرًا</td>
+            </tr>
+            <tr>
+              <td><strong>القيمة الدائمة للعميل (LTV)</strong></td>
+              <td class="glow-emerald"><strong>≈ 5,460 ج.م</strong></td>
+              <td class="glow-emerald"><strong>≈ 171,000 ج.م</strong></td>
+            </tr>
+            <tr class="total-row">
+              <td><strong>نسبة LTV : CAC</strong></td>
+              <td><strong>≈ 19 : 1</strong></td>
+              <td><strong>≈ 19 : 1</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2">
+        <div class="card"
+          style="background:linear-gradient(135deg,rgba(16,185,129,0.07),rgba(6,182,212,0.03));border-color:rgba(16,185,129,0.2);">
+          <div style="font-size:2.5rem;font-weight:900;color:var(--accent-emerald);margin-bottom:0.3rem;">19 : 1</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem;">نسبة LTV:CAC لكلا الشريحتين
+          </div>
+          <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;">
+            نسبة ممتازة نظريًا — تشير إلى SaaS اقتصاديات صحية. <br />
+            <strong style="color:var(--text-primary);">ملاحظة مهمة:</strong> هذه النسبة مبنية على افتراضات لم تُختبر بعد
+            (Churn، عمر العميل، CAC) ويجب استبدالها بأول بيانات فعلية بمجرد توفر 20–30 عميل.
+          </p>
+        </div>
+        <div class="card">
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text-secondary);margin-bottom:1rem;">الافتراضات
+            الجوهرية التي تحكم هذه الأرقام</div>
+          <ul class="styled-list">
+            <li>CAC B2C مبني على ميزانية تسويق شهرية ÷ عدد العملاء المستهدفين</li>
+            <li>CAC B2B يشمل تكاليف دورة مبيعات أطول وجهد مبيعات مباشر</li>
+            <li>Churn 8% للأفراد و4% للمؤسسات = افتراضات لم تُختبر ميدانيًا بعد</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== S7: BREAK-EVEN ===== -->
+    <section class="page-section" id="section-breakeven">
+      <div class="section-number">S07</div>
+      <h2 class="section-title">تحليل نقطة التعادل (Break-Even) </h2>
+
+      <div class="grid-3" style="margin-bottom:2rem;">
+        <div class="be-zone loss">
+          <div class="be-zone-label">⚠️ منطقة الخسارة</div>
+          <div class="be-zone-title">ما دون نقطة التعادل</div>
+          <div class="be-zone-desc">الإيرادات لا تغطي التكاليف الثابتة — يتم تمويل الفجوة من رأس المال الابتدائي</div>
+        </div>
+        <div class="be-zone target">
+          <div class="be-zone-label">📍 تعادل تشغيلي</div>
+          <div class="be-zone-title">المستوى 1 — يغطي OpEx</div>
+          <div class="be-zone-desc">الإيرادات تغطي المصاريف التشغيلية (16,500 ج.م) — دون COGS الثابت</div>
+        </div>
+        <div class="be-zone full">
+          <div class="be-zone-label">✅ تعادل كامل</div>
+          <div class="be-zone-title">المستوى 2 — يغطي OpEx + COGS</div>
+          <div class="be-zone-desc">الإيرادات تغطي OpEx + الجزء الثابت من COGS — العمليات مستدامة ذاتيًا</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:1.5rem;">
+        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.9;">
+          اشتراكَين B2B</strong> (13,000 ج.م) يغطي تكاليف ثابتة قدرها 13,500 ج.م —
+          وهو خطأ حسابي واضح (13,000 لا يغطي 13,500)، فضلاً عن أن التحليل كان يخلط بين نقطة التعادل التشغيلية والكاملة.
+        </p>
+      </div>
+
+      <div class="highlight-box" style="display:flex;gap:2rem;flex-wrap:wrap;">
+        <div>
+          <div class="hl-label">إجمالي التكاليف الثابتة الشهرية للتعادل الكامل</div>
+          <div class="hl-value">22,500 <small style="font-size:0.9rem;color:var(--text-secondary);">ج.م</small></div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.3rem;">OpEx 16,500 + COGS ثابت 6,000</p>
+        </div>
+        <div style="width:1px;background:var(--border);flex-shrink:0;"></div>
+        <div>
+          <div class="hl-label">نقطة التعادل التشغيلي (OpEx فقط)</div>
+          <div class="hl-value">16,500 <small style="font-size:0.9rem;color:var(--text-secondary);">ج.م/شهر</small>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.3rem;">≈ 47 مستخدم B2C Standard أو 3 مؤسسات
+            B2B</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== S8: CASH FLOW ===== -->
+    <section class="page-section" id="section-cashflow">
+      <div class="section-number">S08</div>
+      <h2 class="section-title">التدفق النقدي — 12 شهرًا</h2>
+
+      <div class="card"
+        style="margin-bottom:1.5rem;background:linear-gradient(135deg,rgba(16,185,129,0.05),rgba(6,182,212,0.03));border-color:rgba(16,185,129,0.15);">
+        <div style="display:flex;gap:3rem;flex-wrap:wrap;">
+          <div>
+            <div
+              style="font-size:0.7rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">
+              رأس مال مبدئي</div>
+            <div style="font-size:1.2rem;font-weight:800;">150,000 ج.م</div>
+          </div>
+          <div>
+            <div
+              style="font-size:0.7rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">
+              ناقص CapEx</div>
+            <div style="font-size:1.2rem;font-weight:800;color:var(--accent-rose);">− 96,500 ج.م</div>
+          </div>
+          <div>
+            <div
+              style="font-size:0.7rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">
+              رصيد افتتاحي للتشغيل</div>
+            <div style="font-size:1.2rem;font-weight:800;color:var(--accent-emerald);">= 53,500 ج.م</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrapper" style="margin-bottom:1.25rem;">
+        <div class="table-title">📅 الأشهر 1 إلى 6</div>
+        <table class="cf-table">
+          <thead>
+            <tr>
+              <th>البند</th>
+              <th>الشهر 1</th>
+              <th>الشهر 2</th>
+              <th>الشهر 3</th>
+              <th>الشهر 4</th>
+              <th>الشهر 5</th>
+              <th>الشهر 6</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>إجمالي الإيرادات</td>
+              <td class="cf-revenue">15,100</td>
+              <td class="cf-revenue">34,800</td>
+              <td class="cf-revenue">69,300</td>
+              <td class="cf-revenue">100,000</td>
+              <td class="cf-revenue">135,300</td>
+              <td class="cf-revenue">185,500</td>
+            </tr>
+            <tr>
+              <td>تكاليف البنية (COGS)</td>
+              <td class="cf-cost">8,400</td>
+              <td class="cf-cost">9,200</td>
+              <td class="cf-cost">10,700</td>
+              <td class="cf-cost">12,000</td>
+              <td class="cf-cost">13,500</td>
+              <td class="cf-cost">15,600</td>
+            </tr>
+            <tr>
+              <td>التشغيل (OpEx)</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+            </tr>
+            <tr>
+              <td>إجمالي التكاليف</td>
+              <td class="cf-cost">24,900</td>
+              <td class="cf-cost">25,700</td>
+              <td class="cf-cost">27,200</td>
+              <td class="cf-cost">28,500</td>
+              <td class="cf-cost">30,000</td>
+              <td class="cf-cost">32,100</td>
+            </tr>
+            <tr>
+              <td><strong>صافي التدفق الشهري</strong></td>
+              <td class="cf-net-neg">−9,800</td>
+              <td class="cf-net-pos">9,100</td>
+              <td class="cf-net-pos">42,100</td>
+              <td class="cf-net-pos">71,500</td>
+              <td class="cf-net-pos">105,300</td>
+              <td class="cf-net-pos">153,400</td>
+            </tr>
+            <tr>
+              <td><strong>الرصيد المتراكم</strong></td>
+              <td class="cf-balance">43,700</td>
+              <td class="cf-balance">52,800</td>
+              <td class="cf-balance">94,900</td>
+              <td class="cf-balance">166,400</td>
+              <td class="cf-balance">271,700</td>
+              <td class="cf-balance">425,100</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrapper" style="margin-bottom:1.5rem;">
+        <div class="table-title">📅 الأشهر 7 إلى 12</div>
+        <table class="cf-table">
+          <thead>
+            <tr>
+              <th>البند</th>
+              <th>الشهر 7</th>
+              <th>الشهر 8</th>
+              <th>الشهر 9</th>
+              <th>الشهر 10</th>
+              <th>الشهر 11</th>
+              <th>الشهر 12</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>إجمالي الإيرادات</td>
+              <td class="cf-revenue">228,300</td>
+              <td class="cf-revenue">281,600</td>
+              <td class="cf-revenue">325,700</td>
+              <td class="cf-revenue">348,900</td>
+              <td class="cf-revenue">362,000</td>
+              <td class="cf-revenue">368,500</td>
+            </tr>
+            <tr>
+              <td>تكاليف البنية (COGS)</td>
+              <td class="cf-cost">17,400</td>
+              <td class="cf-cost">19,700</td>
+              <td class="cf-cost">21,600</td>
+              <td class="cf-cost">22,600</td>
+              <td class="cf-cost">23,100</td>
+              <td class="cf-cost">23,400</td>
+            </tr>
+            <tr>
+              <td>التشغيل (OpEx)</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+              <td class="cf-cost">16,500</td>
+            </tr>
+            <tr>
+              <td>إجمالي التكاليف</td>
+              <td class="cf-cost">33,900</td>
+              <td class="cf-cost">36,200</td>
+              <td class="cf-cost">38,100</td>
+              <td class="cf-cost">39,100</td>
+              <td class="cf-cost">39,600</td>
+              <td class="cf-cost">39,900</td>
+            </tr>
+            <tr>
+              <td><strong>صافي التدفق الشهري</strong></td>
+              <td class="cf-net-pos">194,400</td>
+              <td class="cf-net-pos">245,400</td>
+              <td class="cf-net-pos">287,600</td>
+              <td class="cf-net-pos">309,800</td>
+              <td class="cf-net-pos">322,400</td>
+              <td class="cf-net-pos">328,600</td>
+            </tr>
+            <tr>
+              <td><strong>الرصيد المتراكم</strong></td>
+              <td class="cf-balance">619,500</td>
+              <td class="cf-balance">864,900</td>
+              <td class="cf-balance">1,152,500</td>
+              <td class="cf-balance">1,462,300</td>
+              <td class="cf-balance">1,784,700</td>
+              <td class="cf-balance">2,113,300</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2">
+        <div class="highlight-box"
+          style="background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(16,185,129,0.03));border-color:rgba(16,185,129,0.3);">
+          <div class="hl-label" style="color:var(--accent-emerald);">الرصيد المتراكم بنهاية الشهر 12</div>
+          <div class="hl-value" style="color:var(--accent-emerald);">≈ 1.4 مليون ج.م</div>
+          <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.5rem;">يتيح: رواتب للمؤسسين + توسيع التسويق +
+            توظيف موظف أول</p>
+        </div>
+        <div class="card">
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text-secondary);margin-bottom:0.75rem;">مسار التعادل
+          </div>
+          <ul class="styled-list">
+            <li><strong>الشهر 1:</strong> تدفق سالب (−12,500 ج.م) — طبيعي في المراحل الأولى</li>
+            <li><strong>الشهر 2:</strong> أول تدفق إيجابي (+550 ج.م) — نقطة التعادل الأولى</li>
+            <li><strong>الشهر 12:</strong> MRR يبلغ الهدف الكامل (256,000 ج.م)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== S9: RISKS ===== -->
+    <section class="page-section" id="section-risks">
+      <div class="section-number">S09</div>
+      <h2 class="section-title">المخاطر الرئيسية</h2>
+      <p class="section-desc">يحدد المخاطر الجوهرية التي يجب مراقبتها وإدارتها خلال السنة
+        الأولى.</p>
+
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div class="risk-item">
+          <div class="risk-num">1</div>
+          <div class="risk-content">
+            <strong>مخاطر سعر الصرف (FX Risk)</strong>
+            <p>جزء كبير من COGS مقوّم بالدولار الأمريكي (OpenAI API، Firebase، حسابات Apple &amp; Google)، بينما كل
+              الإيرادات بالجنيه المصري — أي انخفاض في قيمة الجنيه يرفع تكاليف COGS فعليًا دون أي إشعار مسبق.</p>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-num">2</div>
+          <div class="risk-content">
+            <strong>طول دورة مبيعات B2B</strong>
+            <p>تم افتراض نمو مؤسسات أبطأ من الأفراد في التدفق النقدي المُعدَّل، لكن هذا الافتراض نفسه يحتاج للتحقق من
+              السوق الفعلي — دورات مبيعات B2B الأكاديمي قد تمتد لأشهر.</p>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-num">3</div>
+          <div class="risk-content">
+            <strong>الافتراضات غير المُختبرة (Churn، عمر العميل، CAC)</strong>
+            <p>أرقام Unit Economics (نسبة LTV:CAC 19:1 وChurn 8% و4%) لا تزال افتراضية — يجب استبدالها بأول بيانات فعلية
+              بمجرد توفر 20–30 عميل حقيقي.</p>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-num">4</div>
+          <div class="risk-content">
+            <strong>تركيز 81% من CapEx في بند واحد (الأجهزة)</strong>
+            <p>هذا التركيز يجعل الميزانية حساسة جدًا لأي تغيير في حجم الفريق المؤسس الفعلي — توسيع الفريق يعني ارتفاع
+              CapEx بشكل غير متناسب.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="report-footer">
+      <span>InsightO — نسخة مُنقّحة 2026 | جميع الأرقام افتراضية لأغراض التخطيط</span>
+      <span>إعداد: عثمان عبدالرازق</span>
+    </footer>
+
+  </main>
+
+  <script>
+    // Active topnav link on scroll
+    const sections = document.querySelectorAll('.page-section, .cover');
+    const navItems = document.querySelectorAll('.topnav-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navItems.forEach(n => n.classList.remove('active'));
+          const active = document.querySelector(`.topnav-link[href="#${id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    sections.forEach(s => observer.observe(s));
+
+    // Scroll progress bar
+    const topnav = document.getElementById('topnav');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      topnav.style.setProperty('--scroll-progress', progress + '%');
+    }, { passive: true });
+
+    // Animate elements on scroll
+    const animateOnScroll = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card, .table-wrapper, .highlight-box, .risk-item, .be-zone').forEach(el => {
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      animateOnScroll.observe(el);
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,202 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/geist";
+
+@config "../tailwind.config.js";
+@layer base {
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary-base: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+    
+    --bg-app: #f5f3ff;
+    --bg-panel: #ffffff;
+    --border-panel: rgba(139, 92, 246, 0.2);
+    --border-panel-hover: rgba(139, 92, 246, 0.4);
+    --text-primary: #2e1065;
+    --text-secondary: #5b21b6;
+    --hover-panel: #ede9fe;
+    
+    --chart-grid: rgba(0, 0, 0, 0.1);
+    --chart-axis-text: #64748b;
+    --chart-tooltip-bg: rgba(255, 255, 255, 0.95);
+    --scrollbar-thumb: #cbd5e1;
+  }
+
+  .dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary-base: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+
+    --bg-app: #0f111a;
+    --bg-panel: #1e1b2e;
+    --border-panel: rgba(255, 255, 255, 0.05);
+    --border-panel-hover: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --hover-panel: rgba(255, 255, 255, 0.02);
+
+    --chart-grid: #2e2e48;
+    --chart-axis-text: #888;
+    --chart-tooltip-bg: #181825;
+    --scrollbar-thumb: #2d2a42;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    @apply bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100;
+  }
+
+  html {
+    @apply font-sans;
+  }
+}
+
+/* ── insightO Brand Pattern ─────────────────────────────────────────────────────────────── */
+
+.brand-pattern {
+  background-color: var(--bg-app);
+  background-image: 
+    linear-gradient(rgba(79, 70, 229, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 70, 229, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* ── HR Console Specific Styles ────────────────────────────────────────────────────── */
+
+:root {
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel {
+  @apply backdrop-blur-xl bg-surface-dark-hr border border-white/10 shadow-lg;
+}
+
+.neon-border-hover:hover {
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+  border-color: rgba(168, 85, 247, 0.8);
+}
+
+.glow-text {
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+/* Custom Scrollbar for HR Console */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb); 
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #4f46e5; 
+}
+/* ==========================================
+   PREMIUM SaaS MINIMALIST SCROLLBAR ENGINE
+   ========================================== */
+
+/* لتطبيق الشريط الرفيع على المتصفح بالكامل (صفحات الوقع) */
+html {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--scrollbar-thumb) transparent !important;
+}
+
+/* 1. تخصيص المتصفحات المبنية على Webkit (Chrome, Safari, Edge, Opera) */
+::-webkit-scrollbar {
+  width: 5px !important;  /* شريط رأسي رفيع جداً */
+  height: 5px !important; /* شريط أفقي رفيع جداً */
+}
+
+/* خلفية المجرى (تكون شفافة تماماً عشان متبوّظش الـ Dark Solid Theme) */
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* الشريط المتحرك نفسه (الـ Thumb) */
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb) !important; /* اللون الافتراضي الداكن المتناسق مع الثيم */
+  border-radius: 9999px !important; /* حواف دائرية فخمة Pill-shaped */
+  border: 1px solid transparent; /* مسافة أمان صامتة */
+  background-clip: padding-box;
+}
+
+/* تأثير المرور بالماوس (Hover Effect) */
+::-webkit-scrollbar-thumb:hover {
+  background: #4f46e5 !important; /* ينور باللون الـ Indigo بتاعنا لما اليوزر يمسكه */
+}
+
+/* 2. دعم الحاويات المعزولة (Scrollable Containers) مثل الـ Sidebars والـ ScrollAreas */
+.overflow-y-auto, 
+.overflow-x-auto,
+.overflow-auto,
+aside,
+main,
+table {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--scrollbar-thumb) transparent !important;
+}
