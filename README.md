@@ -445,7 +445,7 @@ graph TB
         <br />
         <sub>Full-Stack Developer</sub>
         <br />
-        <a href="mailto:osmanabdelrazik@gmail.com">✉️ Email</a>
+        <a href="https://www.linkedin.com/in/othman-abdelrazik/">💼 LinkedIn</a>
       </td>
       <td align="center" width="25%">
         <a href="https://github.com/3mrNour">
