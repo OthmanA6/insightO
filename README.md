@@ -26,21 +26,30 @@
 <table>
   <thead>
     <tr>
-      <th align="center">🌙 Dark Mode Analytics Dashboard</th>
-      <th align="center">☀️ Light Mode Experience</th>
+      <th align="center" width="50%">🌙 Dark Mode Analytics Dashboard</th>
+      <th align="center" width="50%">☀️ Light Mode Experience</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td align="center"><img src="./assets/Dark Mode.png" alt="Dark Mode Dashboard" width="100%"/>
-        <img src="./assets/Dark.png" alt="Dark Mode Dashboard"width="100%"/></td>
-      
-      <td align="center"><img src="./assets/Light Mode.png" alt="Light Mode Dashboard" width="100%"/>
-      <img src="./assets/Light.png" alt="Light" width="100%"/></td>
+      <td align="center">
+        <img src="./assets/Dark%20Mode.png" alt="Dark Mode Analytics Overview" width="100%"/>
+        <br/><br/>
+        <img src="./assets/Dark.png" alt="Dark Mode Detailed View" width="100%"/>
+      </td>
+      <td align="center">
+        <img src="./assets/Light%20Mode.png" alt="Light Mode Analytics Overview" width="100%"/>
+        <br/><br/>
+        <img src="./assets/Light.png" alt="Light Mode Detailed View" width="100%"/>
+      </td>
     </tr>
     <tr>
-      <td align="center">Real-time evaluation trends, sentiment mapping, and performance analytics</td>
-      <td align="center">Clean, high-contrast user interface tailored for seamless accessibility</td>
+      <td align="center">
+        <sub>Real-time evaluation trends, sentiment mapping, and performance analytics</sub>
+      </td>
+      <td align="center">
+        <sub>Clean, high-contrast user interface tailored for seamless accessibility</sub>
+      </td>
     </tr>
   </tbody>
 </table>
