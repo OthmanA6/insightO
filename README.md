@@ -1,12 +1,14 @@
 <div align="center">
 
-# 🚀 InsightO — Smart Educational & Organizational Intelligence Platform
+  <img src="./assets/splash-icon.png" alt="InsightO Logo" width="120" />
 
-  <p align="center">
+  <h1>🚀 InsightO — Smart Educational & Organizational Intelligence Platform</h1>
+
+  <p>
     <strong>Bridging Qualitative Feedback & Quantitative Evaluation through Resilient Multi-Model AI</strong>
   </p>
 
-  <p align="center">
+  <p>
     <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19"></a>
     <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
     <a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-5.2-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express 5"></a>
@@ -26,18 +28,30 @@
 <table>
   <thead>
     <tr>
-      <th align="center">🌙 Dark Mode Analytics Dashboard</th>
-      <th align="center">☀️ Light Mode Experience</th>
+      <th align="center" width="50%">🌙 Dark Mode Analytics Dashboard</th>
+      <th align="center" width="50%">☀️ Light Mode Experience</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td align="center"><img src="./assets/Dark.png" alt="Dark Mode Dashboard" width="100%"/></td>
-      <td align="center"><img src="./assets/Light.png" alt="Light Mode Dashboard" width="100%"/></td>
+      <td align="center">
+        <img src="./assets/Dark%20Mode.png" alt="Dark Mode Analytics Overview" width="100%"/>
+        <br/><br/>
+        <img src="./assets/Dark.png" alt="Dark Mode Detailed View" width="100%"/>
+      </td>
+      <td align="center">
+        <img src="./assets/Light%20Mode.png" alt="Light Mode Analytics Overview" width="100%"/>
+        <br/><br/>
+        <img src="./assets/Light.png" alt="Light Mode Detailed View" width="100%"/>
+      </td>
     </tr>
     <tr>
-      <td align="center">Real-time evaluation trends, sentiment mapping, and performance analytics</td>
-      <td align="center">Clean, high-contrast user interface tailored for seamless accessibility</td>
+      <td align="center">
+        <sub>Real-time evaluation trends, sentiment mapping, and performance analytics</sub>
+      </td>
+      <td align="center">
+        <sub>Clean, high-contrast user interface tailored for seamless accessibility</sub>
+      </td>
     </tr>
   </tbody>
 </table>
