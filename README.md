@@ -1,12 +1,14 @@
 <div align="center">
 
-# 🚀 InsightO — Smart Educational & Organizational Intelligence Platform
+  <img src="./assets/splash-icon.png" alt="InsightO Logo" width="120" />
 
-  <p align="center">
+  <h1>🚀 InsightO — Smart Educational & Organizational Intelligence Platform</h1>
+
+  <p>
     <strong>Bridging Qualitative Feedback & Quantitative Evaluation through Resilient Multi-Model AI</strong>
   </p>
 
-  <p align="center">
+  <p>
     <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19"></a>
     <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
     <a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-5.2-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express 5"></a>
