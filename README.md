@@ -60,7 +60,7 @@
 
 <div align="center">
   <h3>🗺️ System Schema Architecture</h3>
-  <img src="./assets/userSchema.png" alt="User Schema & Entity Relationships" width="85%"/>
+  <img src="./assets/system_architecture.png" alt="User Schema & Entity Relationships" width="85%"/>
 </div>
 
 ---
