@@ -58,6 +58,44 @@
 
 <br>
 
+## 🎯 Core Features Preview
+
+<table>
+  <thead>
+    <tr>
+      <th align="center" width="33%">Dashboard &amp; Analytics</th>
+      <th align="center" width="33%">AI-Powered Grading</th>
+      <th align="center" width="33%">Dynamic Form Builder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center">
+        <img src="./assets/Dashboard%20%26%20Analytics.png" alt="Dashboard &amp; Analytics" width="100%"/>
+      </td>
+      <td align="center">
+        <img src="./assets/AI-Powered%20Grading.png" alt="AI-Powered Grading" width="100%"/>
+      </td>
+      <td align="center">
+        <img src="./assets/Dynamic%20Form%20Builder.png" alt="Dynamic Form Builder" width="100%"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        Real-time evaluation trends, sentiment mapping, and performance curves
+      </td>
+      <td align="center">
+        Deep cognitive analysis with criteria breakdown, concept mastery, and quality metrics
+      </td>
+      <td align="center">
+        Drag-and-drop builder with AI-generated questions from prompts or uploaded files
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
 <div align="center">
   <h3>🗺️ System Schema Architecture</h3>
   <img src="./assets/userSchema.png" alt="User Schema & Entity Relationships" width="85%"/>
