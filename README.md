@@ -34,8 +34,8 @@
     <tr>
       <td align="center"><img src="./assets/Dark Mode.png" alt="Dark Mode Dashboard" width="100%"/></td>
       <td align="center"><img src="./assets/Dark.png" alt="Dark Mode Dashboard" width="100%"/></td>
-      <td align="center"><img src="./assets/Light Mode.png" alt="Light Mode Dashboard" width="100%"/></td>
-      <td align="center"><img src="./assets/Light.png" alt="Light Mode Dashboard" width="100%"/></td>
+      <td align="center"><img src="./assets/Light Mode.png" alt="Light Mode Dashboard" width="100%"/>
+      <img src="./assets/Light.png" alt="Light" width="100%"/></td>
     </tr>
     <tr>
       <td align="center">Real-time evaluation trends, sentiment mapping, and performance analytics</td>
