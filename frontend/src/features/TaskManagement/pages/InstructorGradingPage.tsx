@@ -227,7 +227,7 @@ export default function InstructorGradingPage() {
   ];
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-7xl mx-auto text-content">
+    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in duration-300 max-w-7xl mx-auto text-content">
       {/* Breadcrumb */}
       <BreadcrumbNav
         homeItem={{ label: 'Command Center', href: '/dashboard' }}
@@ -389,7 +389,7 @@ export default function InstructorGradingPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting || !grade}
-                  className="w-full h-11 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:bg-panel-hover text-content font-black text-xs shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-1.5"
+                  className="w-full h-11 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:bg-panel-hover text-white font-black text-xs shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-1.5"
                 >
                   {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                   Finalize Evaluation
@@ -405,14 +405,14 @@ export default function InstructorGradingPage() {
             <TabsList className="grid w-full grid-cols-2 h-14 bg-panel/60 border border-panel-hover rounded-2xl p-1.5 backdrop-blur-md">
               <TabsTrigger
                 value="submission"
-                className="flex items-center justify-center gap-2.5 h-full rounded-xl data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold transition-all border border-transparent data-[state=active]:border-panel"
+                className="flex items-center justify-center gap-2.5 h-full rounded-xl data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold transition-all border border-transparent data-[state=active]:border-panel"
               >
                 <LayoutTemplate className="h-4.5 w-4.5" />
                 <span>Student Submission</span>
               </TabsTrigger>
               <TabsTrigger
                 value="ai-report"
-                className="flex items-center justify-center gap-2.5 h-full rounded-xl data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold transition-all border border-transparent data-[state=active]:border-panel"
+                className="flex items-center justify-center gap-2.5 h-full rounded-xl data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold transition-all border border-transparent data-[state=active]:border-panel"
               >
                 <BrainCircuit className="h-4.5 w-4.5" />
                 <span>Detailed AI Analytics</span>

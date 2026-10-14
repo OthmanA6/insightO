@@ -5,20 +5,31 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   startIcon?: React.ReactNode;
 }
 
+/** Shared text-field surface, also used by `Textarea`. */
+export const fieldClasses = cn(
+  "w-full rounded-[10px] border border-separator bg-field text-sm text-content",
+  "placeholder:text-content-muted/70",
+  "transition-[border-color,box-shadow,background-color] duration-150 ease-out",
+  "focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/15",
+  "aria-[invalid=true]:border-destructive aria-[invalid=true]:ring-destructive/15",
+  "disabled:cursor-not-allowed disabled:opacity-50"
+)
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, startIcon, ...props }, ref) => {
     return (
       <div className="relative w-full">
         {startIcon && (
-          <div className="absolute start-3 top-1/2 -translate-y-1/2 text-content-muted dark:text-content-muted">
+          <div className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-content-muted">
             {startIcon}
           </div>
         )}
         <input
           type={type}
           className={cn(
-            "flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-content-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-content-muted dark:focus-visible:ring-primary",
-            startIcon && "ps-10",
+            fieldClasses,
+            "flex h-10 px-3 py-2 file:border-0 file:bg-transparent file:text-sm file:font-medium",
+            startIcon && "ps-9",
             className
           )}
           ref={ref}

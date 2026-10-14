@@ -1139,7 +1139,7 @@ export default function FormBuilderPage() {
                                       className={cn(
                                         "px-3 py-2 rounded-lg text-[9px] font-black uppercase transition-all border",
                                         evaluatorRoles.includes(role as FormRole)
-                                          ? "bg-indigo-600 border-indigo-500 text-content"
+                                          ? "bg-indigo-600 border-indigo-500 text-white"
                                           : "bg-app border-panel text-content-muted hover:text-content-muted"
                                       )}
                                     >
@@ -1659,7 +1659,7 @@ export default function FormBuilderPage() {
                 </Button>
                 <Button
                   onClick={handleAIGenerate}
-                  className="h-12 px-8 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 text-content font-black text-xs shadow-xl shadow-purple-500/20 transition-all flex items-center gap-2"
+                  className="h-12 px-8 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 text-white font-black text-xs shadow-xl shadow-purple-500/20 transition-all flex items-center gap-2"
                 >
                   <Zap className="h-4 w-4" /> Synthesize Survey
                 </Button>

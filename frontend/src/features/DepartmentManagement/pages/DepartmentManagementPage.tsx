@@ -99,7 +99,7 @@ export default function DepartmentManagementPage() {
   };
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-7xl mx-auto">
+    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in duration-300 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="space-y-1">

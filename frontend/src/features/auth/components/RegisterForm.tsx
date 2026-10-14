@@ -212,7 +212,7 @@ export default function RegisterForm() {
   };
 
   const inputClass =
-    'w-full bg-slate-50 dark:bg-surface-dark border-2 border-slate-200 dark:border-slate-800 focus:border-primary dark:focus:border-primary rounded-lg py-3.5 ps-12 pe-4 outline-none transition-all text-slate-900 dark:text-content placeholder:text-content-muted shadow-sm';
+    'w-full bg-field border border-separator focus:border-primary focus:ring-4 focus:ring-primary/15 rounded-[10px] py-3.5 ps-12 pe-4 outline-none transition-all text-content placeholder:text-content-muted shadow-sm';
 
   const busy = isSendingOtp || isVerifying || isLoading;
 
@@ -230,7 +230,7 @@ export default function RegisterForm() {
             </span>
           </div>
 
-          <div className="flex-1 h-1 mx-3 bg-slate-200 dark:bg-panel-hover rounded-full relative overflow-hidden">
+          <div className="flex-1 h-1 mx-3 bg-fill-strong rounded-full relative overflow-hidden">
             <div
               className="absolute top-0 start-0 h-full bg-primary rounded-full transition-all duration-500"
               style={{ width: step >= 2 ? '100%' : '0%' }}
@@ -242,7 +242,7 @@ export default function RegisterForm() {
               className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all ${
                 step >= 2
                   ? 'bg-primary text-white border-primary'
-                  : 'bg-slate-100 dark:bg-surface-dark text-content-muted border-slate-200 dark:border-slate-700'
+                  : 'bg-fill text-content-muted border-transparent'
               }`}
             >
               2
@@ -262,7 +262,7 @@ export default function RegisterForm() {
       {step === 1 && (
         <div className="animate-fade-in">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-content mb-2">
+            <h2 className="text-3xl font-bold text-content mb-2">
               Create your account
             </h2>
             <p className="text-content-muted dark:text-content-muted">
@@ -274,7 +274,7 @@ export default function RegisterForm() {
             {/* Name Row */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">
+                <label className="text-sm font-semibold text-content-muted ms-1">
                   First Name
                 </label>
                 <div className="relative group">
@@ -288,7 +288,7 @@ export default function RegisterForm() {
                 )}
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">
+                <label className="text-sm font-semibold text-content-muted ms-1">
                   Last Name
                 </label>
                 <div className="relative group">
@@ -305,7 +305,7 @@ export default function RegisterForm() {
 
             {/* Email */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">
+              <label className="text-sm font-semibold text-content-muted ms-1">
                 Work Email Address
               </label>
               <div className="relative group">
@@ -321,7 +321,7 @@ export default function RegisterForm() {
 
             {/* National ID */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">
+              <label className="text-sm font-semibold text-content-muted ms-1">
                 National ID
               </label>
               <div className="relative group">
@@ -337,7 +337,7 @@ export default function RegisterForm() {
 
             {/* Role */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">
+              <label className="text-sm font-semibold text-content-muted ms-1">
                 Role
               </label>
               <div className="relative group">
@@ -362,7 +362,7 @@ export default function RegisterForm() {
             {/* Department (conditional) */}
             {(selectedRole === 'INSTRUCTOR' || selectedRole === 'HOD') && (
               <div className="space-y-2 animate-fade-in">
-                <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">Department</label>
+                <label className="text-sm font-semibold text-content-muted ms-1">Department</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none">
                     <Building2 className="size-5 text-content-muted group-focus-within:text-primary transition-colors" />
@@ -378,7 +378,7 @@ export default function RegisterForm() {
             {/* Academic Year (conditional) */}
             {selectedRole === 'STUDENT' && (
               <div className="space-y-2 animate-fade-in">
-                <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">Academic Year</label>
+                <label className="text-sm font-semibold text-content-muted ms-1">Academic Year</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none">
                     <GraduationCap className="size-5 text-content-muted group-focus-within:text-primary transition-colors" />
@@ -394,7 +394,7 @@ export default function RegisterForm() {
             {/* Password Row */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">Password</label>
+                <label className="text-sm font-semibold text-content-muted ms-1">Password</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none">
                     <Lock className="size-5 text-content-muted group-focus-within:text-primary transition-colors" />
@@ -409,7 +409,7 @@ export default function RegisterForm() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 end-0 pe-4 flex items-center text-content-muted hover:text-slate-600 dark:hover:text-content transition-colors"
+                    className="absolute inset-y-0 end-0 pe-4 flex items-center text-content-muted hover:text-content transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="size-5" />
@@ -423,7 +423,7 @@ export default function RegisterForm() {
                 )}
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">Confirm Password</label>
+                <label className="text-sm font-semibold text-content-muted ms-1">Confirm Password</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none">
                     <Lock className="size-5 text-content-muted group-focus-within:text-primary transition-colors" />
@@ -438,7 +438,7 @@ export default function RegisterForm() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute inset-y-0 end-0 pe-4 flex items-center text-content-muted hover:text-slate-600 dark:hover:text-content transition-colors"
+                    className="absolute inset-y-0 end-0 pe-4 flex items-center text-content-muted hover:text-content transition-colors"
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="size-5" />
@@ -457,7 +457,7 @@ export default function RegisterForm() {
             <button
               type="submit"
               disabled={busy}
-              className="w-full py-4 bg-primary hover:bg-primary-hover text-content font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2 mt-2 transform hover:-translate-y-0.5 disabled:opacity-60 disabled:pointer-events-none"
+              className="w-full py-4 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-primary-sm transition-[scale,background-color] duration-200 active:scale-[0.98] active:duration-75 flex items-center justify-center gap-2 mt-2 disabled:opacity-60 disabled:pointer-events-none"
             >
               {isSendingOtp ? (
                 <><Loader2 className="size-5 animate-spin" /> Sending verification code…</>
@@ -466,7 +466,7 @@ export default function RegisterForm() {
               )}
             </button>
 
-            <p className="text-center text-sm text-slate-600 dark:text-content-muted pt-2">
+            <p className="text-center text-sm text-content-muted pt-2">
               Already have an account?{' '}
               <Link to="/login" className="text-primary font-bold hover:underline">Sign in</Link>
             </p>
@@ -481,19 +481,19 @@ export default function RegisterForm() {
             <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4">
               <MailCheck className="size-6" />
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-content mb-2">
+            <h2 className="text-3xl font-bold text-content mb-2">
               Check your inbox
             </h2>
-            <p className="text-slate-600 dark:text-content-muted leading-relaxed">
+            <p className="text-content-muted leading-relaxed">
               We&apos;ve sent a 6-digit secure code to{' '}
-              <strong className="text-slate-900 dark:text-content">{formData.email}</strong>.
+              <strong className="text-content">{formData.email}</strong>.
             </p>
           </div>
 
           <form onSubmit={step2Form.handleSubmit(onStep2Submit)} className="space-y-6">
             {/* OTP Input */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">
+              <label className="text-sm font-semibold text-content-muted ms-1">
                 Security Code
               </label>
               <input
@@ -502,7 +502,7 @@ export default function RegisterForm() {
                 maxLength={6}
                 autoFocus
                 placeholder="------"
-                className="w-full bg-slate-50 dark:bg-surface-dark border-2 border-slate-200 dark:border-slate-800 focus:border-primary dark:focus:border-primary rounded-lg py-4 px-4 text-2xl font-bold outline-none transition-all text-slate-900 dark:text-content shadow-sm text-center tracking-[0.5em]"
+                className="w-full bg-field border border-separator focus:border-primary focus:ring-4 focus:ring-primary/15 rounded-[10px] py-4 px-4 text-2xl font-bold outline-none transition-all text-content shadow-sm text-center tracking-[0.5em]"
                 {...step2Form.register('otp')}
               />
               {step2Form.formState.errors.otp && (
@@ -515,7 +515,7 @@ export default function RegisterForm() {
               <div className="text-sm text-content-muted dark:text-content-muted flex items-center gap-1.5">
                 <Clock className="size-4" />
                 Code expires in{' '}
-                <span className="font-bold text-slate-900 dark:text-content font-mono">
+                <span className="font-bold text-content font-mono">
                   {timer.formatted}
                 </span>
               </div>
@@ -525,7 +525,7 @@ export default function RegisterForm() {
                 onClick={handleResend}
                 className={`text-sm font-bold transition-colors ${
                   timer.seconds > 0 || isSendingOtp
-                    ? 'text-content-muted dark:text-slate-600 cursor-not-allowed'
+                    ? 'text-content-muted opacity-50 cursor-not-allowed'
                     : 'text-primary hover:text-primary-hover cursor-pointer'
                 }`}
               >
@@ -542,7 +542,7 @@ export default function RegisterForm() {
                   setStep(1);
                 }}
                 disabled={busy}
-                className="px-6 py-4 bg-slate-100 dark:bg-surface-dark hover:bg-slate-200 dark:hover:bg-panel-hover text-slate-700 dark:text-content-muted font-bold rounded-xl transition-all flex items-center gap-2 disabled:opacity-60"
+                className="px-6 py-4 bg-fill hover:bg-fill-strong text-content font-semibold rounded-xl active:scale-[0.97] transition-all flex items-center gap-2 disabled:opacity-60"
               >
                 <ArrowLeft className="size-4" />
                 Back
@@ -550,7 +550,7 @@ export default function RegisterForm() {
               <button
                 type="submit"
                 disabled={busy}
-                className="flex-1 py-4 bg-primary hover:bg-primary-hover text-content font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:pointer-events-none"
+                className="flex-1 py-4 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-primary-sm transition-[scale,background-color] duration-200 active:scale-[0.98] active:duration-75 flex items-center justify-center gap-2 disabled:opacity-60 disabled:pointer-events-none"
               >
                 {isVerifying || isLoading ? (
                   <><Loader2 className="size-5 animate-spin" /> Verifying…</>

@@ -205,7 +205,7 @@ export default function ProfilePage() {
                 <button
                   onClick={handleAvatarClick}
                   disabled={isUploadingAvatar}
-                  className="absolute bottom-1 end-1 p-2.5 rounded-full bg-indigo-600 border-4 border-white dark:border-[#1e1b2e] text-content hover:bg-indigo-500 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute bottom-1 end-1 p-2.5 rounded-full bg-indigo-600 border-4 border-white dark:border-[#1e1b2e] text-white hover:bg-indigo-500 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   title="Upload profile picture"
                 >
                   {isUploadingAvatar ? (

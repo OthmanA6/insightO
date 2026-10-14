@@ -147,7 +147,7 @@ export function InstructorGradingModal({ open, onClose, submission, task, form, 
               <Button 
                 type="submit"
                 disabled={isSubmitting || !grade}
-                className="h-12 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:bg-panel-hover text-content font-bold shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2"
+                className="h-12 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:bg-panel-hover text-white font-bold shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2"
               >
                 {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                 Finalize Grade

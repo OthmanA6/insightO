@@ -1,202 +1,317 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@fontsource-variable/geist";
 
 @config "../tailwind.config.js";
+
+/* ── Type scale ─────────────────────────────────────────────────────────────
+   Tracking and leading are size-specific: small text opens up, display text
+   tightens. Values follow Inter's dynamic metrics, which mirror SF Pro.       */
+@theme {
+  --text-xs--line-height: 1rem;
+  --text-xs--letter-spacing: 0.005em;
+  --text-sm--line-height: 1.25rem;
+  --text-sm--letter-spacing: -0.006em;
+  --text-base--line-height: 1.5rem;
+  --text-base--letter-spacing: -0.011em;
+  --text-lg--line-height: 1.625rem;
+  --text-lg--letter-spacing: -0.014em;
+  --text-xl--line-height: 1.75rem;
+  --text-xl--letter-spacing: -0.017em;
+  --text-2xl--line-height: 2rem;
+  --text-2xl--letter-spacing: -0.019em;
+  --text-3xl--line-height: 2.25rem;
+  --text-3xl--letter-spacing: -0.021em;
+  --text-4xl--line-height: 2.5rem;
+  --text-4xl--letter-spacing: -0.022em;
+  --text-5xl--line-height: 1.08;
+  --text-5xl--letter-spacing: -0.022em;
+  --text-6xl--line-height: 1.05;
+  --text-6xl--letter-spacing: -0.022em;
+
+  --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+
+  --color-fill: var(--fill);
+  --color-fill-strong: var(--fill-strong);
+  --color-field: var(--field);
+  --color-separator: var(--separator);
+  --color-separator-strong: var(--separator-strong);
+  --color-segment: var(--segment);
+  --color-tint: var(--tint);
+  --color-scrim: var(--scrim);
+  --color-tertiary-label: var(--tertiary-label);
+
+  --shadow-modal: var(--modal-shadow);
+  --shadow-popover: var(--popover-shadow);
+}
+
 @layer base {
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary-base: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
-    
-    --bg-app: #f5f3ff;
+    color-scheme: light;
+
+    /* Apple system palette — light */
+    --tint: #5856d6;
+    --tint-hover: #4b49c7;
+    --system-red: #ff3b30;
+    --system-green: #34c759;
+    --system-orange: #ff9500;
+
+    --label: #1d1d1f;
+    --secondary-label: #6e6e73;
+    --tertiary-label: #aeaeb2;
+    --separator: rgba(60, 60, 67, 0.14);
+    --separator-strong: rgba(60, 60, 67, 0.26);
+    --fill: rgba(120, 120, 128, 0.12);
+    --fill-strong: rgba(120, 120, 128, 0.2);
+    --field: #ffffff;
+    --segment: #ffffff;
+
+    --bg-app: #f5f5f7;
     --bg-panel: #ffffff;
-    --border-panel: rgba(139, 92, 246, 0.2);
-    --border-panel-hover: rgba(139, 92, 246, 0.4);
-    --text-primary: #2e1065;
-    --text-secondary: #5b21b6;
-    --hover-panel: #ede9fe;
-    
-    --chart-grid: rgba(0, 0, 0, 0.1);
-    --chart-axis-text: #64748b;
-    --chart-tooltip-bg: rgba(255, 255, 255, 0.95);
-    --scrollbar-thumb: #cbd5e1;
+    --border-panel: rgba(60, 60, 67, 0.08);
+    --border-panel-hover: rgba(60, 60, 67, 0.14);
+    --text-primary: var(--label);
+    --text-secondary: var(--secondary-label);
+    --hover-panel: rgba(120, 120, 128, 0.08);
+
+    /* Materials: lighter for interactive surfaces, heavier for structure */
+    --material-bar: rgba(245, 245, 247, 0.78);
+    --material-popover: rgba(255, 255, 255, 0.8);
+    --material-sidebar: #ececf0;
+    --material-edge: rgba(255, 255, 255, 0.6);
+    --popover-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.18), 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+    --modal-shadow: 0 32px 80px -16px rgba(0, 0, 0, 0.28), 0 4px 16px -4px rgba(0, 0, 0, 0.08);
+    --scrim: rgba(0, 0, 0, 0.32);
+
+    /* shadcn tokens, resolved to the system palette */
+    --background: var(--bg-app);
+    --foreground: var(--label);
+    --card: var(--bg-panel);
+    --card-foreground: var(--label);
+    --popover: var(--bg-panel);
+    --popover-foreground: var(--label);
+    --primary-base: var(--tint);
+    --primary-foreground: #ffffff;
+    --secondary: var(--fill);
+    --secondary-foreground: var(--label);
+    --muted: var(--fill);
+    --muted-foreground: var(--secondary-label);
+    --accent: var(--fill);
+    --accent-foreground: var(--label);
+    --destructive: var(--system-red);
+    --border: var(--separator);
+    --input: var(--separator);
+    --ring: var(--tint);
+    --radius: 0.75rem;
+    --sidebar: var(--material-sidebar);
+    --sidebar-foreground: var(--label);
+    --sidebar-border: var(--separator);
+
+    --chart-grid: rgba(60, 60, 67, 0.1);
+    --chart-axis-text: #8e8e93;
+    --chart-tooltip-bg: var(--material-popover);
+    --scrollbar-thumb: rgba(120, 120, 128, 0.36);
   }
 
   .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary-base: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    color-scheme: dark;
 
-    --bg-app: #0f111a;
-    --bg-panel: #1e1b2e;
-    --border-panel: rgba(255, 255, 255, 0.05);
+    /* Apple system palette — dark */
+    --tint: #5e5ce6;
+    --tint-hover: #7472ee;
+    --system-red: #ff453a;
+    --system-green: #30d158;
+    --system-orange: #ff9f0a;
+
+    --label: #f5f5f7;
+    --secondary-label: #98989d;
+    --tertiary-label: #636366;
+    --separator: rgba(255, 255, 255, 0.1);
+    --separator-strong: rgba(255, 255, 255, 0.2);
+    --fill: rgba(120, 120, 128, 0.24);
+    --fill-strong: rgba(120, 120, 128, 0.36);
+    --field: rgba(118, 118, 128, 0.18);
+    --segment: #5a5a5e;
+
+    --bg-app: #000000;
+    --bg-panel: #1c1c1e;
+    --border-panel: rgba(255, 255, 255, 0.06);
     --border-panel-hover: rgba(255, 255, 255, 0.1);
-    --text-primary: #ffffff;
-    --text-secondary: #94a3b8;
-    --hover-panel: rgba(255, 255, 255, 0.02);
+    --hover-panel: rgba(255, 255, 255, 0.06);
 
-    --chart-grid: #2e2e48;
-    --chart-axis-text: #888;
-    --chart-tooltip-bg: #181825;
-    --scrollbar-thumb: #2d2a42;
+    --material-bar: rgba(10, 10, 12, 0.72);
+    --material-popover: rgba(44, 44, 48, 0.82);
+    --material-sidebar: #141416;
+    --material-edge: rgba(255, 255, 255, 0.08);
+    --popover-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.6), 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+    --modal-shadow: 0 32px 80px -16px rgba(0, 0, 0, 0.7), 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+    --scrim: rgba(0, 0, 0, 0.56);
+
+    --chart-grid: rgba(255, 255, 255, 0.08);
+    --chart-axis-text: #8e8e93;
+    --scrollbar-thumb: rgba(120, 120, 128, 0.44);
+  }
+
+  @media (prefers-contrast: more) {
+    :root {
+      --secondary-label: #3a3a3c;
+      --separator: rgba(60, 60, 67, 0.4);
+      --border-panel: rgba(60, 60, 67, 0.32);
+      --border-panel-hover: rgba(60, 60, 67, 0.48);
+    }
+    .dark {
+      --secondary-label: #c7c7cc;
+      --separator: rgba(255, 255, 255, 0.32);
+      --border-panel: rgba(255, 255, 255, 0.24);
+      --border-panel-hover: rgba(255, 255, 255, 0.36);
+    }
   }
 
   * {
     border-color: var(--border);
   }
 
-  body {
-    @apply bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100;
-  }
-
   html {
     @apply font-sans;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--bg-app);
+    color: var(--label);
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--tint) 28%, transparent);
   }
 }
 
-/* ── insightO Brand Pattern ─────────────────────────────────────────────────────────────── */
+/* ── Materials ──────────────────────────────────────────────────────────── */
+
+@utility material-bar {
+  background-color: var(--material-bar);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+
+  @media (prefers-reduced-transparency: reduce) {
+    background-color: var(--bg-app);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@utility material-popover {
+  background-color: var(--material-popover);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--popover-shadow);
+
+  @media (prefers-reduced-transparency: reduce) {
+    background-color: var(--bg-panel);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@utility material-sidebar {
+  background-color: var(--material-sidebar);
+}
+
+/* View-transition cross-fade for light ↔ dark, so the brightness change eases. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 320ms;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *:not(.animate-spin),
+  *:not(.animate-spin)::before,
+  *:not(.animate-spin)::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── insightO Brand Pattern ─────────────────────────────────────────────── */
 
 .brand-pattern {
   background-color: var(--bg-app);
-  background-image: 
-    linear-gradient(rgba(79, 70, 229, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(79, 70, 229, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--tint) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--tint) 6%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
-/* ── HR Console Specific Styles ────────────────────────────────────────────────────── */
-
-:root {
-  --glass-border: rgba(255, 255, 255, 0.08);
-}
+/* ── Legacy HR Console helpers ──────────────────────────────────────────── */
 
 .glass-panel {
-  @apply backdrop-blur-xl bg-surface-dark-hr border border-white/10 shadow-lg;
+  @apply material-popover border border-separator;
 }
 
 .neon-border-hover:hover {
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-  border-color: rgba(168, 85, 247, 0.8);
+  border-color: color-mix(in srgb, var(--tint) 50%, transparent);
 }
 
 .glow-text {
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+  text-shadow: none;
 }
 
-/* Custom Scrollbar for HR Console */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent; 
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb); 
-  border-radius: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #4f46e5; 
-}
-/* ==========================================
-   PREMIUM SaaS MINIMALIST SCROLLBAR ENGINE
-   ========================================== */
+/* ── Scrollbars ─────────────────────────────────────────────────────────── */
 
-/* لتطبيق الشريط الرفيع على المتصفح بالكامل (صفحات الوقع) */
-html {
-  scrollbar-width: thin !important;
-  scrollbar-color: var(--scrollbar-thumb) transparent !important;
-}
-
-/* 1. تخصيص المتصفحات المبنية على Webkit (Chrome, Safari, Edge, Opera) */
-::-webkit-scrollbar {
-  width: 5px !important;  /* شريط رأسي رفيع جداً */
-  height: 5px !important; /* شريط أفقي رفيع جداً */
-}
-
-/* خلفية المجرى (تكون شفافة تماماً عشان متبوّظش الـ Dark Solid Theme) */
-::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-
-/* الشريط المتحرك نفسه (الـ Thumb) */
-::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb) !important; /* اللون الافتراضي الداكن المتناسق مع الثيم */
-  border-radius: 9999px !important; /* حواف دائرية فخمة Pill-shaped */
-  border: 1px solid transparent; /* مسافة أمان صامتة */
-  background-clip: padding-box;
-}
-
-/* تأثير المرور بالماوس (Hover Effect) */
-::-webkit-scrollbar-thumb:hover {
-  background: #4f46e5 !important; /* ينور باللون الـ Indigo بتاعنا لما اليوزر يمسكه */
-}
-
-/* 2. دعم الحاويات المعزولة (Scrollable Containers) مثل الـ Sidebars والـ ScrollAreas */
-.overflow-y-auto, 
+html,
+.overflow-y-auto,
 .overflow-x-auto,
 .overflow-auto,
 aside,
 main,
 table {
-  scrollbar-width: thin !important;
-  scrollbar-color: var(--scrollbar-thumb) transparent !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-label);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }

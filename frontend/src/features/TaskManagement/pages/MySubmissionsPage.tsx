@@ -45,7 +45,7 @@ export default function MySubmissionsPage() {
   }
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-7xl mx-auto min-h-[calc(100vh-4rem)]">
+    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in duration-300 max-w-7xl mx-auto min-h-[calc(100vh-4rem)]">
       
       <section className="flex flex-col gap-2 pb-6 border-b border-border">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

@@ -48,7 +48,7 @@ export default function InstructorCourseManagement() {
   }
 
   return (
-    <div className="flex-1 p-6 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-10">
+    <div className="flex-1 p-6 md:p-10 animate-in fade-in duration-300 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-10">
       {/* Header and Search */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div className="space-y-1">

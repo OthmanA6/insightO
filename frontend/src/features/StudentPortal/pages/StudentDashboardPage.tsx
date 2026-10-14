@@ -96,7 +96,7 @@ export default function StudentDashboardPage() {
   }
 
   return (
-    <div className="flex-1 p-6 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-10">
+    <div className="flex-1 p-6 md:p-10 animate-in fade-in duration-300 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-10">
       
       {/* Header & Metrics */}
       <section className="space-y-8">

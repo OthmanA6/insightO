@@ -123,7 +123,7 @@ export function GlobalDepartmentAnalyticsDashboard() {
   const sortedByPerformance = [...data.comparisons].sort((a, b) => b.completionRate - a.completionRate);
 
   return (
-    <div className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+    <div className="space-y-8 animate-in fade-in duration-300">
       {/* ── KPI Cards ──────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <SummaryCard

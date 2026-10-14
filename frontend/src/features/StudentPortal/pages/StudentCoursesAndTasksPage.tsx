@@ -105,7 +105,7 @@ export default function StudentCoursesAndTasksPage() {
   }
 
   return (
-    <div className="flex-1 p-6 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-8">
+    <div className="flex-1 p-6 md:p-10 animate-in fade-in duration-300 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-8">
       
       <Tabs defaultValue="courses" className="w-full">
         {/* TOP SEGMENTED CONTROL & HEADER ROW */}
@@ -137,10 +137,10 @@ export default function StudentCoursesAndTasksPage() {
             </div>
 
             <TabsList className="bg-slate-100/80 dark:bg-indigo-950/20 backdrop-blur-md border border-panel-hover p-1 rounded-xl h-auto shrink-0">
-              <TabsTrigger value="courses" className="rounded-lg px-6 py-2.5 text-xs font-bold data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-content text-content-muted transition-all">
+              <TabsTrigger value="courses" className="rounded-lg px-6 py-2.5 text-xs font-bold data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white text-content-muted transition-all">
                 My Courses
               </TabsTrigger>
-              <TabsTrigger value="tasks" className="rounded-lg px-6 py-2.5 text-xs font-bold data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-content text-content-muted transition-all">
+              <TabsTrigger value="tasks" className="rounded-lg px-6 py-2.5 text-xs font-bold data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white text-content-muted transition-all">
                 Task Center
               </TabsTrigger>
             </TabsList>

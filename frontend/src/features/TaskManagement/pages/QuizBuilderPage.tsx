@@ -317,7 +317,7 @@ export default function QuizBuilderPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button onClick={() => setIsAIModalOpen(true)} className="h-10 flex items-center gap-2 rounded-xl bg-purple-500/10 border border-purple-500/30 px-4 text-xs font-bold text-purple-400 hover:bg-purple-500 hover:text-content">
+          <Button onClick={() => setIsAIModalOpen(true)} className="h-10 flex items-center gap-2 rounded-xl bg-purple-500/10 border border-purple-500/30 px-4 text-xs font-bold text-purple-400 hover:bg-purple-500 hover:text-white">
             <Zap className="h-4 w-4" /> AI Synthesize Survey
           </Button>
           <div className="h-6 w-px bg-white/10 mx-2"></div>
@@ -387,17 +387,17 @@ export default function QuizBuilderPage() {
                   <Tabs value={targetType} onValueChange={(v) => setTargetType(v as any)} className="w-full">
                     <TabsList className={`grid w-full bg-app p-1 rounded-xl h-12 border border-panel ${contextCourseId ? 'grid-cols-1' : contextDepartmentId ? 'grid-cols-2' : 'grid-cols-3'}`}>
                       {(!contextDepartmentId || contextCourseId) && (
-                        <TabsTrigger value="COURSE" className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold text-xs flex items-center gap-2">
+                        <TabsTrigger value="COURSE" className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold text-xs flex items-center gap-2">
                           <BookOpen className="h-3.5 w-3.5" /> Course
                         </TabsTrigger>
                       )}
                       {!contextCourseId && (
-                        <TabsTrigger value="DEPARTMENT" className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold text-xs flex items-center gap-2">
+                        <TabsTrigger value="DEPARTMENT" className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold text-xs flex items-center gap-2">
                           <Building2 className="h-3.5 w-3.5" /> Dept
                         </TabsTrigger>
                       )}
                       {!contextCourseId && (
-                        <TabsTrigger value="SPECIFIC" className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold text-xs flex items-center gap-2">
+                        <TabsTrigger value="SPECIFIC" className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold text-xs flex items-center gap-2">
                           <Users className="h-3.5 w-3.5" /> Specific
                         </TabsTrigger>
                       )}

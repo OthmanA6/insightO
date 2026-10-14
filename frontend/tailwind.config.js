@@ -5,14 +5,14 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', 'Inter', '"Segoe UI"', 'system-ui', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
       },
       colors: {
         // ── insightO Brand Palette ──────────────────────────────
         primary: {
-          DEFAULT: '#4f46e5',
-          hover:   '#4338ca',
+          DEFAULT: 'var(--tint)',
+          hover:   'var(--tint-hover)',
           50:  '#eef2ff',
           100: '#e0e7ff',
           200: '#c7d2fe',
@@ -60,10 +60,14 @@ export default {
         'panel': 'var(--border-panel)',
         'panel-hover': 'var(--border-panel-hover)',
       },
+      divideColor: {
+        'panel': 'var(--border-panel)',
+        'panel-hover': 'var(--border-panel-hover)',
+      },
       boxShadow: {
-        'primary-sm': '0 1px 3px 0 rgba(79,70,229,.4)',
-        'primary':    '0 4px 14px 0 rgba(79,70,229,.35)',
-        'primary-lg': '0 8px 24px 0 rgba(79,70,229,.4)',
+        'primary-sm': '0 1px 2px 0 rgba(88,86,214,.25)',
+        'primary':    '0 2px 8px -2px rgba(88,86,214,.35)',
+        'primary-lg': '0 6px 16px -4px rgba(88,86,214,.4)',
         'neon-card': '0 0 10px rgba(168, 85, 247, 0.15), inset 0 0 1px rgba(168, 85, 247, 0.2)',
         'neon-cyan': '0 0 10px rgba(6, 182, 212, 0.3)',
         'neon-magenta': '0 0 10px rgba(219, 39, 119, 0.3)',
@@ -88,7 +92,7 @@ export default {
       },
       animation: {
         'fade-in':  'fade-in 200ms ease-out both',
-        'zoom-in':  'zoom-in 220ms cubic-bezier(0.16,1,0.3,1) both',
+        'zoom-in':  'zoom-in 320ms cubic-bezier(0.32,0.72,0,1) both',
         'fade-out': 'fade-out 150ms ease-in both',
       },
     },

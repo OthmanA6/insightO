@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
   logoutBtnText: { color: '#ef4444', fontSize: 16, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.5 },
 
   // Modal Styles
-  modalOverlay: { ...StyleSheet.absoluteFillObject, justifyContent: 'flex-end', zIndex: 1000 },
+  modalOverlay: { ...StyleSheet.absoluteFill, justifyContent: 'flex-end', zIndex: 1000 },
   modalContent: { backgroundColor: '#1e293b', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, paddingBottom: 100 },
   modalContentLight: { backgroundColor: '#fff' },
   modalTitle: { fontSize: 20, fontWeight: 'bold', color: '#fff', marginBottom: 10 },

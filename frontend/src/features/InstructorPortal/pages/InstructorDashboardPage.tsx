@@ -103,7 +103,7 @@ export default function InstructorDashboardPage() {
   }
 
   return (
-    <div className="flex-1 p-6 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-10">
+    <div className="flex-1 p-6 md:p-10 animate-in fade-in duration-300 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-10">
 
       {/* Header & Metrics */}
       <section className="space-y-8">
@@ -138,10 +138,10 @@ export default function InstructorDashboardPage() {
 
       <Tabs defaultValue="courses" className="w-full">
         <TabsList className="bg-slate-100/80 dark:bg-indigo-950/20 backdrop-blur-md border border-panel-hover p-1 mb-8 flex w-fit rounded-2xl shadow-sm">
-          <TabsTrigger value="courses" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-sm font-bold transition-all">
+          <TabsTrigger value="courses" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-sm font-bold transition-all">
             My Courses & Tasks
           </TabsTrigger>
-          <TabsTrigger value="insights" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-sm font-bold transition-all">
+          <TabsTrigger value="insights" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-sm font-bold transition-all">
             Course Insights
           </TabsTrigger>
         </TabsList>
@@ -252,7 +252,7 @@ export default function InstructorDashboardPage() {
                           to={`/dashboard/courses/${courseId}/tasks/${task.id || task._id}`}
                         >
                           <Button
-                            className="w-full md:w-auto h-12 px-6 rounded-xl text-xs font-bold bg-panel-hover text-content-muted hover:bg-indigo-600 hover:text-content transition-colors flex items-center gap-2 border border-panel-hover shadow-none hover:shadow-[0_0_15px_rgba(79,70,229,0.3)]"
+                            className="w-full md:w-auto h-12 px-6 rounded-xl text-xs font-bold bg-panel-hover text-content-muted hover:bg-indigo-600 hover:text-white transition-colors flex items-center gap-2 border border-panel-hover shadow-none hover:shadow-[0_0_15px_rgba(79,70,229,0.3)]"
                           >
                             <Search className="h-4 w-4" /> View Submissions
                           </Button>

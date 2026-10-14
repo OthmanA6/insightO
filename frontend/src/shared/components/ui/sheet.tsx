@@ -14,7 +14,7 @@ const SheetOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     className={cn(
-      "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 z-50 bg-scrim data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-300",
       className
     )}
     {...props}
@@ -43,15 +43,16 @@ const SheetContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed z-50 gap-4 bg-panel border-panel-hover p-6 shadow-xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+        "fixed z-50 gap-4 border-separator bg-panel p-6 shadow-modal ease-fluid",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:duration-400 data-[state=closed]:duration-300",
         sheetVariants[side],
         className
       )}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute end-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-        <X className="h-4 w-4 text-content/60" />
+      <DialogPrimitive.Close className="absolute end-4 top-4 inline-flex h-7 w-7 items-center justify-center rounded-full bg-fill text-content-muted transition-[scale,background-color] duration-150 hover:bg-fill-strong active:scale-90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/25">
+        <X className="h-3.5 w-3.5" strokeWidth={2.5} />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
@@ -87,7 +88,7 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-content/50", className)}
+    className={cn("text-sm text-content-muted", className)}
     {...props}
   />
 ))

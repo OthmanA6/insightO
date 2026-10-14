@@ -526,7 +526,7 @@ export default function FormsResultsPage() {
                                   <p className="text-sm text-slate-700 dark:text-content-muted font-medium leading-relaxed italic mb-3">"{ans}"</p>
                                   <div className="flex items-center gap-3">
                                     <div className="flex -space-x-2">
-                                      <div className="h-5 w-5 rounded-full bg-indigo-500 flex items-center justify-center text-[8px] text-content font-bold ring-2 ring-white dark:ring-surface-dark">
+                                      <div className="h-5 w-5 rounded-full bg-indigo-500 flex items-center justify-center text-[8px] text-white font-bold ring-2 ring-white dark:ring-surface-dark">
                                         {form.is_anonymous ? 'A' : (submissions.find(s => s.answers.some(a => a.value === ans))?.evaluator_id as any)?.firstName?.charAt(0) || 'A'}
                                       </div>
                                     </div>
@@ -611,7 +611,7 @@ export default function FormsResultsPage() {
                                     <div key={val} className={cn(
                                       "h-10 w-10 flex items-center justify-center rounded-xl border-2 text-sm font-black transition-all",
                                       Number(answer?.value) === val
-                                        ? "bg-indigo-600 border-indigo-500 text-content shadow-lg shadow-indigo-500/20 scale-110"
+                                        ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20 scale-110"
                                         : "bg-slate-50 dark:bg-bg-dark border-transparent text-content-muted"
                                     )}>
                                       {val}
@@ -656,7 +656,7 @@ export default function FormsResultsPage() {
 
                 {/* AI STATE: INITIAL / NO DATA */}
                 {!aiData && !isAiLoading && (
-                  <div className="max-w-4xl mx-auto w-full animate-in fade-in zoom-in-95 duration-500">
+                  <div className="max-w-4xl mx-auto w-full animate-in fade-in duration-300">
                     <div className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-[2.5rem] p-10 md:p-14 relative overflow-hidden shadow-2xl group border border-purple-500/30 text-center">
                       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
                       <Lightbulb className="absolute -end-20 -bottom-20 opacity-10 h-96 w-96 text-content pointer-events-none group-hover:scale-110 transition-transform duration-700" />

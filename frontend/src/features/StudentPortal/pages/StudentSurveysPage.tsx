@@ -104,7 +104,7 @@ export default function StudentSurveysPage() {
   }
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-7xl mx-auto min-h-[calc(100vh-4rem)]">
+    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in duration-300 max-w-7xl mx-auto min-h-[calc(100vh-4rem)]">
       
       <Tabs defaultValue="pending" className="w-full">
         {/* TOP HEADER ROW */}
@@ -120,10 +120,10 @@ export default function StudentSurveysPage() {
 
           <div className="flex items-center gap-4">
             <TabsList className="bg-slate-100/80 dark:bg-indigo-950/20 backdrop-blur-md border border-panel-hover p-1 rounded-xl h-auto shrink-0">
-              <TabsTrigger value="pending" className="rounded-lg px-6 py-2.5 text-xs font-bold data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-content text-content-muted transition-all">
+              <TabsTrigger value="pending" className="rounded-lg px-6 py-2.5 text-xs font-bold data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white text-content-muted transition-all">
                 Pending Surveys
               </TabsTrigger>
-              <TabsTrigger value="history" className="rounded-lg px-6 py-2.5 text-xs font-bold data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-content text-content-muted transition-all">
+              <TabsTrigger value="history" className="rounded-lg px-6 py-2.5 text-xs font-bold data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white text-content-muted transition-all">
                 History
               </TabsTrigger>
             </TabsList>

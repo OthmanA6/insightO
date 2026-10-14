@@ -237,7 +237,7 @@ export function UserConfigurationModal({ open, onClose, onSuccess, user, mode = 
         {mode === 'approve' && user && (
           <div className="p-6 rounded-2xl bg-panel border border-violet-500/15 flex items-center justify-between shadow-inner shadow-violet-950/20 animate-in fade-in slide-in-from-top-4">
             <div className="flex items-center gap-4">
-              <div className="h-14 w-14 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-xl font-bold text-content shadow-lg ring-2 ring-violet-500/20">
+              <div className="h-14 w-14 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-xl font-bold text-white shadow-lg ring-2 ring-violet-500/20">
                 {user.firstName?.charAt(0)}
               </div>
               <div>

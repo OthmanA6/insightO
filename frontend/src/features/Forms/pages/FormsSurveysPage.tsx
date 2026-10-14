@@ -616,42 +616,42 @@ export default function FormsSurveysPage() {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <Button 
-                    variant={targetFilter === 'all' ? 'default' : 'outline'} 
+                    variant={targetFilter === 'all' ? 'primary' : 'outline'} 
                     className={cn("h-16 justify-start px-6 rounded-xl font-bold border-panel-hover transition-all", targetFilter === 'all' && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                     onClick={() => { setTargetFilter('all'); setIsFilterModalOpen(false); }}
                   >
                     All Targets
                   </Button>
                   <Button 
-                    variant={targetFilter === 'GENERAL' ? 'default' : 'outline'} 
+                    variant={targetFilter === 'GENERAL' ? 'primary' : 'outline'} 
                     className={cn("h-16 justify-start px-6 rounded-xl font-bold border-panel-hover transition-all", targetFilter === 'GENERAL' && "bg-emerald-600 text-white border-transparent shadow-lg shadow-emerald-500/20")}
                     onClick={() => { setTargetFilter('GENERAL'); setIsFilterModalOpen(false); }}
                   >
                     General Forms
                   </Button>
                   <Button 
-                    variant={targetFilter === 'FACILITY' ? 'default' : 'outline'} 
+                    variant={targetFilter === 'FACILITY' ? 'primary' : 'outline'} 
                     className={cn("h-16 justify-start px-6 rounded-xl font-bold border-panel-hover transition-all", targetFilter === 'FACILITY' && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                     onClick={() => { setTargetFilter('FACILITY'); setIsFilterModalOpen(false); }}
                   >
                     All Facilities
                   </Button>
                   <Button 
-                    variant={targetFilter === 'COURSE' ? 'default' : 'outline'} 
+                    variant={targetFilter === 'COURSE' ? 'primary' : 'outline'} 
                     className={cn("h-16 justify-start px-6 rounded-xl font-bold border-panel-hover transition-all", targetFilter === 'COURSE' && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                     onClick={() => { setTargetFilter('COURSE'); setIsFilterModalOpen(false); }}
                   >
                     All Courses
                   </Button>
                   <Button 
-                    variant={targetFilter === 'DEPARTMENT' ? 'default' : 'outline'} 
+                    variant={targetFilter === 'DEPARTMENT' ? 'primary' : 'outline'} 
                     className={cn("h-16 justify-start px-6 rounded-xl font-bold border-panel-hover transition-all", targetFilter === 'DEPARTMENT' && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                     onClick={() => { setTargetFilter('DEPARTMENT'); setIsFilterModalOpen(false); }}
                   >
                     All Departments
                   </Button>
                   <Button 
-                    variant={targetFilter === 'INSTRUCTOR' ? 'default' : 'outline'} 
+                    variant={targetFilter === 'INSTRUCTOR' ? 'primary' : 'outline'} 
                     className={cn("h-16 justify-start px-6 rounded-xl font-bold border-panel-hover transition-all", targetFilter === 'INSTRUCTOR' && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                     onClick={() => { setTargetFilter('INSTRUCTOR'); setIsFilterModalOpen(false); }}
                   >
@@ -670,7 +670,7 @@ export default function FormsSurveysPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {Array.from(specificTargets.courses.entries()).map(([id, name]) => (
                       <Button 
-                        key={id} variant={targetFilter === `COURSE_${id}` ? 'default' : 'outline'} 
+                        key={id} variant={targetFilter === `COURSE_${id}` ? 'primary' : 'outline'} 
                         onClick={() => { setTargetFilter(`COURSE_${id}`); setIsFilterModalOpen(false); }}
                         className={cn("min-h-[56px] h-auto py-3 px-4 justify-start text-left border-panel-hover overflow-hidden", targetFilter === `COURSE_${id}` && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                       >
@@ -691,7 +691,7 @@ export default function FormsSurveysPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {Array.from(specificTargets.depts.entries()).map(([id, name]) => (
                       <Button 
-                        key={id} variant={targetFilter === `DEPARTMENT_${id}` ? 'default' : 'outline'} 
+                        key={id} variant={targetFilter === `DEPARTMENT_${id}` ? 'primary' : 'outline'} 
                         onClick={() => { setTargetFilter(`DEPARTMENT_${id}`); setIsFilterModalOpen(false); }}
                         className={cn("min-h-[56px] h-auto py-3 px-4 justify-start text-left border-panel-hover overflow-hidden", targetFilter === `DEPARTMENT_${id}` && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                       >
@@ -712,7 +712,7 @@ export default function FormsSurveysPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {Array.from(specificTargets.instructors.entries()).map(([id, name]) => (
                       <Button 
-                        key={id} variant={targetFilter === `INSTRUCTOR_${id}` ? 'default' : 'outline'} 
+                        key={id} variant={targetFilter === `INSTRUCTOR_${id}` ? 'primary' : 'outline'} 
                         onClick={() => { setTargetFilter(`INSTRUCTOR_${id}`); setIsFilterModalOpen(false); }}
                         className={cn("min-h-[56px] h-auto py-3 px-4 justify-start text-left border-panel-hover overflow-hidden", targetFilter === `INSTRUCTOR_${id}` && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                       >
@@ -733,7 +733,7 @@ export default function FormsSurveysPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {Array.from(specificTargets.facilities.entries()).map(([id, name]) => (
                       <Button 
-                        key={id} variant={targetFilter === `FACILITY_${id}` ? 'default' : 'outline'} 
+                        key={id} variant={targetFilter === `FACILITY_${id}` ? 'primary' : 'outline'} 
                         onClick={() => { setTargetFilter(`FACILITY_${id}`); setIsFilterModalOpen(false); }}
                         className={cn("min-h-[56px] h-auto py-3 px-4 justify-start text-left border-panel-hover overflow-hidden", targetFilter === `FACILITY_${id}` && "bg-indigo-600 text-white border-transparent shadow-lg shadow-indigo-500/20")}
                       >

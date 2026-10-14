@@ -42,7 +42,7 @@ export default function LoginForm() {
   return (
     <>
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-content mb-2">
+        <h2 className="text-3xl font-bold text-content mb-2">
           Sign in to your dashboard
         </h2>
         <p className="text-content-muted dark:text-content-muted">
@@ -53,7 +53,7 @@ export default function LoginForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* ── Email ──────────────────────────────────────────────── */}
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-700 dark:text-content-muted ms-1">
+          <label className="text-sm font-semibold text-content-muted ms-1">
             Work Email Address
           </label>
           <div className="relative group">
@@ -64,7 +64,7 @@ export default function LoginForm() {
               type="email"
               placeholder="name@company.com"
               autoComplete="email"
-              className="w-full bg-slate-50 dark:bg-surface-dark border-2 border-slate-200 dark:border-slate-800 focus:border-primary dark:focus:border-primary rounded-lg py-3.5 ps-12 pe-4 outline-none transition-all text-slate-900 dark:text-content placeholder:text-content-muted shadow-sm"
+              className="w-full bg-field border border-separator focus:border-primary focus:ring-4 focus:ring-primary/15 rounded-[10px] py-3.5 ps-12 pe-4 outline-none transition-all text-content placeholder:text-content-muted shadow-sm"
               {...register('email')}
             />
           </div>
@@ -76,7 +76,7 @@ export default function LoginForm() {
         {/* ── Password ───────────────────────────────────────────── */}
         <div className="space-y-2">
           <div className="flex items-center justify-between ms-1">
-            <label className="text-sm font-semibold text-slate-700 dark:text-content-muted">
+            <label className="text-sm font-semibold text-content-muted">
               Password
             </label>
           </div>
@@ -88,13 +88,13 @@ export default function LoginForm() {
               type={showPassword ? 'text' : 'password'}
               placeholder="••••••••"
               autoComplete="current-password"
-              className="w-full bg-slate-50 dark:bg-surface-dark border-2 border-slate-200 dark:border-slate-800 focus:border-primary dark:focus:border-primary rounded-lg py-3.5 ps-12 pe-12 outline-none transition-all text-slate-900 dark:text-content placeholder:text-content-muted shadow-sm"
+              className="w-full bg-field border border-separator focus:border-primary focus:ring-4 focus:ring-primary/15 rounded-[10px] py-3.5 ps-12 pe-12 outline-none transition-all text-content placeholder:text-content-muted shadow-sm"
               {...register('password')}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 end-0 pe-4 flex items-center text-content-muted hover:text-slate-600 dark:hover:text-content transition-colors"
+              className="absolute inset-y-0 end-0 pe-4 flex items-center text-content-muted hover:text-content transition-colors"
             >
               {showPassword ? (
                 <EyeOff className="size-5" />
@@ -115,9 +115,9 @@ export default function LoginForm() {
           <label className="flex items-center gap-2 cursor-pointer group">
             <input
               type="checkbox"
-              className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-surface-dark accent-primary cursor-pointer"
+              className="w-4 h-4 rounded border-separator-strong bg-field accent-primary cursor-pointer"
             />
-            <span className="text-sm text-slate-600 dark:text-content-muted group-hover:text-slate-900 dark:group-hover:text-content transition-colors">
+            <span className="text-sm text-content-muted group-hover:text-content transition-colors">
               Remember me
             </span>
           </label>
@@ -133,7 +133,7 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-4 bg-primary hover:bg-primary-hover text-content font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2 mt-2 transform hover:-translate-y-0.5 disabled:opacity-60 disabled:pointer-events-none"
+          className="w-full py-4 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-primary-sm transition-[scale,background-color] duration-200 active:scale-[0.98] active:duration-75 flex items-center justify-center gap-2 mt-2 disabled:opacity-60 disabled:pointer-events-none"
         >
           {isLoading ? (
             <>
@@ -149,7 +149,7 @@ export default function LoginForm() {
         </button>
 
 
-        <p className="text-center text-sm text-slate-600 dark:text-content-muted pt-2">
+        <p className="text-center text-sm text-content-muted pt-2">
           Don&apos;t have an enterprise account?{' '}
           <Link
             to="/register"

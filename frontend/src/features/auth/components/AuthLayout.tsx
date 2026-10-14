@@ -23,60 +23,53 @@ export default function AuthLayout({
   features,
 }: AuthLayoutProps) {
   return (
-    <div className="flex min-h-screen w-full overflow-hidden font-sans transition-colors duration-300">
+    <div className="flex min-h-dvh w-full overflow-hidden font-sans">
       {/* ── Left Brand Panel ──────────────────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-app border-e border-slate-300/50 dark:border-slate-800/50 overflow-hidden items-center justify-center p-20">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-app border-e border-separator overflow-hidden items-center justify-center p-20">
         <div className="absolute inset-0 brand-pattern z-0 pointer-events-none" />
 
-        <div className="absolute top-0 start-0 w-full h-full opacity-40 z-0 pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-indigo-500/20 dark:bg-indigo-600/30 rounded-full blur-[120px] animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[30rem] h-[30rem] bg-purple-500/20 dark:bg-purple-600/20 rounded-full blur-[150px]" />
+        <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute -top-[10%] -left-[10%] w-96 h-96 rounded-full bg-indigo-500/12 blur-[120px]" />
+          <div className="absolute -bottom-[10%] -right-[10%] w-[30rem] h-[30rem] rounded-full bg-purple-500/10 blur-[150px]" />
         </div>
 
         <div className="relative z-10 max-w-xl">
-          <Link to="/" className="flex items-center gap-3 mb-12">
-            <img src="/logo.svg" alt="InsightO Logo" className="h-12 w-12 object-contain drop-shadow-md" />
-            <h2 className="text-content text-3xl font-bold tracking-tight">
-              insightO
-            </h2>
+          <Link to="/" className="mb-14 inline-flex items-center gap-3">
+            <img src="/logo.svg" alt="" className="h-11 w-11 object-contain" />
+            <span className="text-content text-2xl font-semibold">insightO</span>
           </Link>
 
-          <h1 className="text-content text-5xl font-black leading-tight tracking-tight mb-8">
+          <h1 className="text-content text-5xl font-bold tracking-[-0.03em] mb-6">
             {headline}
           </h1>
-          <p className="text-content-muted text-xl leading-relaxed mb-12">
+          <p className="text-content-muted text-lg leading-relaxed mb-12">
             {description}
           </p>
 
-          <div className="space-y-6">
+          <ul className="space-y-5">
             {features.map((feature, i) => {
               const isIndigo = feature.accentColor === 'indigo';
               return (
-                <div
-                  key={i}
-                  className="flex items-center gap-4 group cursor-default"
-                >
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center border transition-colors ${
-                      isIndigo
-                        ? 'bg-indigo-500/10 border-indigo-500/20 group-hover:bg-indigo-500/30 group-hover:border-indigo-500/40'
-                        : 'bg-purple-500/10 border-purple-500/20 group-hover:bg-purple-500/30 group-hover:border-purple-500/40'
+                <li key={i} className="flex items-center gap-4">
+                  <span
+                    className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center ${
+                      isIndigo ? 'bg-indigo-500/12' : 'bg-purple-500/12'
                     }`}
                   >
                     {feature.icon}
-                  </div>
-                  <span className="text-content-muted font-medium">
+                  </span>
+                  <span className="text-content-muted text-[15px] font-medium">
                     {feature.text}
                   </span>
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ul>
         </div>
       </div>
 
       {/* ── Right Form Panel ──────────────────────────────────────────── */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 overflow-y-auto bg-white dark:bg-bg-dark relative">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 overflow-y-auto bg-panel relative">
         <div className="absolute top-6 end-6 z-50">
           <ThemeToggle />
         </div>
@@ -84,11 +77,9 @@ export default function AuthLayout({
         <div className="w-full max-w-lg relative z-10">
           {/* Mobile logo */}
           <div className="mb-8 lg:hidden">
-            <Link to="/" className="flex items-center gap-2">
-              <img src="/logo.svg" alt="InsightO Logo" className="h-10 w-10 object-contain drop-shadow-md" />
-              <h2 className="text-slate-900 dark:text-content text-2xl font-bold tracking-tight">
-                insightO
-              </h2>
+            <Link to="/" className="inline-flex items-center gap-2">
+              <img src="/logo.svg" alt="" className="h-9 w-9 object-contain" />
+              <span className="text-content text-xl font-semibold">insightO</span>
             </Link>
           </div>
 

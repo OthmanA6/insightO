@@ -2,7 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { MotionConfig } from 'framer-motion'
 import { store } from './app/store'
+import { spring } from './shared/lib/motion'
 import App from './App'
 import './index.css'
 
@@ -18,9 +20,11 @@ if (storedTheme === 'dark' || (!storedTheme && systemDark)) {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <MotionConfig reducedMotion="user" transition={spring.default}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </MotionConfig>
     </Provider>
   </React.StrictMode>,
 )

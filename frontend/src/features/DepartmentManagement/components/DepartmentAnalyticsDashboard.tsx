@@ -37,7 +37,7 @@ export function DepartmentAnalyticsDashboard({ departmentId }: { departmentId: s
   }, [departmentId, viewMode, data]);
 
   return (
-    <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
+    <div className="space-y-6 animate-in fade-in duration-300">
       
       {/* View Mode Toggle */}
       <div className="flex justify-center mb-8">

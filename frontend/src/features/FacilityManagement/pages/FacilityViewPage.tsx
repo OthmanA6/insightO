@@ -132,7 +132,7 @@ export default function FacilityViewPage() {
   }
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-7xl mx-auto min-h-[calc(100vh-4rem)]">
+    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in duration-300 max-w-7xl mx-auto min-h-[calc(100vh-4rem)]">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-panel-hover pb-6">
         <div className="space-y-2">

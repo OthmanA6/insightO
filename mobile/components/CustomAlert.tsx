@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   backdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(2, 6, 23, 0.65)',
   },
   alertBox: {

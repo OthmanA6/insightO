@@ -77,7 +77,7 @@ export default function InstructorCourseDetailView() {
   }
 
   return (
-    <div className="flex-1 p-6 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-8">
+    <div className="flex-1 p-6 md:p-10 animate-in fade-in duration-300 max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)] space-y-8">
 <BreadcrumbNav 
   homeItem={{ label: 'Command Center', href: '/dashboard' }}
   items={[
@@ -121,10 +121,10 @@ export default function InstructorCourseDetailView() {
 
       <Tabs defaultValue="tasks" className="w-full space-y-8">
         <TabsList className="bg-slate-100/80 dark:bg-indigo-950/20 border border-panel p-1 h-14 rounded-2xl">
-          <TabsTrigger value="tasks" className="rounded-xl data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold px-8 h-full flex items-center gap-2">
+          <TabsTrigger value="tasks" className="rounded-xl data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold px-8 h-full flex items-center gap-2">
             <Target className="h-4 w-4" /> Active Tasks
           </TabsTrigger>
-          <TabsTrigger value="students" className="rounded-xl data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold px-8 h-full flex items-center gap-2">
+          <TabsTrigger value="students" className="rounded-xl data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold px-8 h-full flex items-center gap-2">
             <Users className="h-4 w-4" /> Student Progress
           </TabsTrigger>
         </TabsList>
@@ -161,7 +161,7 @@ export default function InstructorCourseDetailView() {
                       <span className="text-content">{taskSubmissions.length} Received</span>
                     </div>
                     <Link to={`/dashboard/courses/${courseId}/tasks/${task.id || task._id}`}>
-                      <Button className="w-full h-10 mt-2 bg-panel-hover hover:bg-indigo-600 text-white-muted hover:text-content transition-all font-bold rounded-xl border border-panel-hover hover:border-indigo-500">
+                      <Button className="w-full h-10 mt-2 bg-panel-hover hover:bg-indigo-600 text-white-muted hover:text-white transition-all font-bold rounded-xl border border-panel-hover hover:border-indigo-500">
                         View Submissions <ArrowRight className="ms-2 h-4 w-4" />
                       </Button>
                     </Link>

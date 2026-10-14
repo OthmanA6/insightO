@@ -248,7 +248,7 @@ export default function CourseDetailView() {
   );
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 animate-in fade-in zoom-in-95 duration-500 max-w-7xl mx-auto min-h-[calc(100vh-4rem)]">
+    <div className="flex-1 space-y-8 p-4 md:p-8 animate-in fade-in duration-300 max-w-7xl mx-auto min-h-[calc(100vh-4rem)]">
 
       {/* Breadcrumb & Navigation */}
       <div className="flex items-center justify-between">

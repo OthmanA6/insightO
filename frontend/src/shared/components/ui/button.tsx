@@ -7,69 +7,66 @@ import { cn } from '@/shared/lib/utils'
 const buttonVariants = cva(
   // Base styles shared across all variants
   [
-    'inline-flex items-center justify-center gap-2 rounded-lg font-semibold',
-    'transition-all duration-150 ease-in-out select-none whitespace-nowrap',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-    'focus-visible:ring-primary-500 focus-visible:ring-offset-white',
-    'dark:focus-visible:ring-offset-bg-dark',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'active:scale-95',
+    'relative inline-flex items-center justify-center gap-2 font-semibold',
+    'select-none whitespace-nowrap touch-manipulation',
+    // Press feedback lands on pointer-down; the release eases back out.
+    'transition-[scale,background-color,border-color,color,box-shadow,opacity,filter] duration-200 ease-out',
+    'active:scale-[0.97] active:duration-75',
+    'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/25',
+    'disabled:pointer-events-none disabled:opacity-40',
     '[&_svg]:pointer-events-none [&_svg]:shrink-0',
   ],
   {
     variants: {
       variant: {
-        /**
-         * Solid indigo – primary CTA
-         */
+        /** Filled accent – the one primary action in a view */
         primary: [
-          'bg-primary-600 text-content',
-          'shadow-primary',
-          'hover:bg-primary-hover hover:shadow-primary-lg',
+          'bg-primary text-white shadow-primary-sm',
+          'hover:bg-primary-hover',
         ],
 
-        /**
-         * Indigo → Purple gradient – "Generate AI" & hero CTAs
-         */
+        /** Indigo → Purple gradient – "Generate AI" & hero CTAs */
         gradient: [
-          'bg-gradient-primary text-content',
-          'shadow-primary',
-          'hover:opacity-90 hover:shadow-primary-lg',
+          'bg-gradient-primary text-white shadow-primary-sm',
+          'hover:brightness-110',
         ],
 
-        /**
-         * Outlined – secondary actions
-         */
+        /** Gray fill – secondary actions that sit beside a primary one */
+        secondary: [
+          'bg-fill text-content',
+          'hover:bg-fill-strong',
+        ],
+
+        /** Accent-tinted fill – emphasis without the weight of a filled button */
+        tinted: [
+          'bg-primary/12 text-primary',
+          'hover:bg-primary/18',
+        ],
+
+        /** Hairline outline – secondary actions on busy surfaces */
         outline: [
-          'border border-slate-700 bg-transparent text-slate-900',
-          'hover:bg-slate-100',
-          'dark:text-content dark:border-slate-600',
-          'dark:hover:bg-surface-highlight',
+          'border border-separator bg-transparent text-content',
+          'hover:bg-panel-hover',
         ],
 
-        /**
-         * Ghost – low-emphasis actions (nav items, icon buttons)
-         */
+        /** Ghost – low-emphasis actions (toolbars, icon buttons) */
         ghost: [
-          'border-0 bg-transparent text-slate-700',
-          'hover:bg-slate-100 hover:text-slate-900',
-          'dark:text-content-muted dark:hover:bg-surface-highlight dark:hover:text-content',
+          'bg-transparent text-content-muted',
+          'hover:bg-panel-hover hover:text-content',
         ],
 
-        /**
-         * Danger – destructive / irreversible actions
-         */
+        /** Destructive – irreversible actions */
         danger: [
-          'bg-red-600 text-white',
-          'shadow-sm shadow-red-500/40',
-          'hover:bg-red-700 hover:shadow-red-500/50',
+          'bg-destructive text-white shadow-sm',
+          'hover:brightness-110',
         ],
       },
 
       size: {
-        sm: 'h-8 px-3 text-xs [&_svg]:size-3.5',
-        md: 'h-10 px-4 text-sm [&_svg]:size-4',
-        lg: 'h-12 px-6 text-base [&_svg]:size-5',
+        sm: 'h-8 rounded-lg px-3 text-[13px] [&_svg]:size-3.5',
+        md: 'h-10 rounded-[10px] px-4 text-sm [&_svg]:size-4',
+        lg: 'h-12 rounded-xl px-6 text-[15px] [&_svg]:size-5',
+        icon: 'h-9 w-9 rounded-full [&_svg]:size-4',
       },
     },
 
@@ -96,7 +93,7 @@ export interface ButtonProps
  *
  * @example
  * <Button variant="gradient" size="lg">Generate AI Report</Button>
- * <Button variant="outline" size="sm">Cancel</Button>
+ * <Button variant="secondary" size="sm">Cancel</Button>
  * <Button variant="danger">Delete</Button>
  */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(

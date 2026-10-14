@@ -195,10 +195,10 @@ export default function UserManagementPage() {
 
       <Tabs value={activeTab} className="w-full" onValueChange={setActiveTab}>
         <TabsList className="bg-panel border border-panel p-1 mb-4">
-          <TabsTrigger value="all" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-content">
+          <TabsTrigger value="all" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
             All Users ({usersExcludingPendingApproval.length})
           </TabsTrigger>
-          <TabsTrigger value="pending" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-content relative">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white relative">
             Pending Approval ({pendingApprovalOnly.length})
             {pendingApprovalOnly.length > 0 && (
               <span className="absolute -top-1 -end-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
@@ -228,11 +228,11 @@ export default function UserManagementPage() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="bg-panel border-panel-hover text-content-muted w-48">
                     <DropdownMenuLabel>Filter by Role</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => setRoleFilter('ALL')} className="hover:bg-indigo-600 hover:text-content cursor-pointer">All Roles</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setRoleFilter('STUDENT')} className="hover:bg-indigo-600 hover:text-content cursor-pointer">Student</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setRoleFilter('INSTRUCTOR')} className="hover:bg-indigo-600 hover:text-content cursor-pointer">Instructor</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setRoleFilter('HOD')} className="hover:bg-indigo-600 hover:text-content cursor-pointer">Head of Dept</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setRoleFilter('ADMIN')} className="hover:bg-indigo-600 hover:text-content cursor-pointer">Admin</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setRoleFilter('ALL')} className="hover:bg-indigo-600 hover:text-white cursor-pointer">All Roles</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setRoleFilter('STUDENT')} className="hover:bg-indigo-600 hover:text-white cursor-pointer">Student</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setRoleFilter('INSTRUCTOR')} className="hover:bg-indigo-600 hover:text-white cursor-pointer">Instructor</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setRoleFilter('HOD')} className="hover:bg-indigo-600 hover:text-white cursor-pointer">Head of Dept</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setRoleFilter('ADMIN')} className="hover:bg-indigo-600 hover:text-white cursor-pointer">Admin</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -423,11 +423,11 @@ function UserTable({ users, selectedIds, onToggleSelect, onSelectAll, onDelete, 
                       <DropdownMenuContent align="end" className="w-48 bg-panel border-panel-hover text-content-muted">
                         <DropdownMenuLabel className="font-bold text-xs uppercase tracking-widest text-violet-400">Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator className="bg-panel-hover" />
-                        <DropdownMenuItem className="hover:bg-indigo-600 hover:text-content cursor-pointer gap-2">
+                        <DropdownMenuItem className="hover:bg-indigo-600 hover:text-white cursor-pointer gap-2">
                           <Eye className="h-3.5 w-3.5" /> View Profile
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          className="hover:bg-indigo-600 hover:text-content cursor-pointer gap-2"
+                          className="hover:bg-indigo-600 hover:text-white cursor-pointer gap-2"
                           onClick={() => {
                             setSelectedPendingUser(user as any);
                             setModalMode('edit');
@@ -436,12 +436,12 @@ function UserTable({ users, selectedIds, onToggleSelect, onSelectAll, onDelete, 
                         >
                           <Settings className="h-3.5 w-3.5" /> Edit User
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="hover:bg-indigo-600 hover:text-content cursor-pointer gap-2">
+                        <DropdownMenuItem className="hover:bg-indigo-600 hover:text-white cursor-pointer gap-2">
                           <Shield className="h-3.5 w-3.5" /> Edit Permissions
                         </DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-panel-hover" />
                         <DropdownMenuItem
-                          className="text-red-400 focus:bg-red-500 focus:text-content cursor-pointer gap-2"
+                          className="text-red-400 focus:bg-red-500 focus:text-white cursor-pointer gap-2"
                           onClick={() => onDelete(user.id)}
                         >
                           <Trash2 className="h-3.5 w-3.5" /> Permanent Delete

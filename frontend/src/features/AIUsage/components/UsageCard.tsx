@@ -30,7 +30,7 @@ export default function UsageCard({ usage }: UsageCardProps) {
       
       <div className="relative z-10">
         <div className="flex items-center gap-3 mb-8">
-          <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg shadow-indigo-500/20 text-content">
+          <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg shadow-indigo-500/20 text-white">
             <Sparkles className="w-6 h-6" />
           </div>
           <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">

@@ -242,7 +242,7 @@ export function TaskAnalyticsDashboard({ departmentId, courseId, taskId }: { dep
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+    <div className="space-y-8 animate-in fade-in duration-300">
 
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <div className="flex flex-col gap-1">

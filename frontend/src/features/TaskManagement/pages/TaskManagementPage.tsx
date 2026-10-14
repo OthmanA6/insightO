@@ -90,7 +90,7 @@ export default function TaskManagementPage() {
   };
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in zoom-in-95 duration-500 max-w-7xl mx-auto">
+    <div className="flex-1 space-y-8 p-4 md:p-10 animate-in fade-in duration-300 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="space-y-1">
@@ -118,14 +118,14 @@ export default function TaskManagementPage() {
         <TabsList className="bg-panel border border-panel p-1.5 rounded-2xl mb-8 inline-flex h-14 items-center justify-center gap-1">
           <TabsTrigger
             value="tasks"
-            className="rounded-xl px-8 py-2.5 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted hover:text-content transition-all shadow-sm"
+            className="rounded-xl px-8 py-2.5 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted hover:text-content transition-all shadow-sm"
           >
             Tasks Management
           </TabsTrigger>
           {canViewAnalytics && (
             <TabsTrigger
               value="analytics"
-              className="rounded-xl px-8 py-2.5 text-sm font-bold data-[state=active]:bg-purple-600 data-[state=active]:text-content text-content-muted hover:text-content transition-all shadow-sm flex items-center gap-2"
+              className="rounded-xl px-8 py-2.5 text-sm font-bold data-[state=active]:bg-purple-600 data-[state=active]:text-white text-content-muted hover:text-content transition-all shadow-sm flex items-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>
               Task Analytics
@@ -249,7 +249,7 @@ export default function TaskManagementPage() {
 
                 <div className="mt-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-black text-content">
+                    <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-black text-white">
                       {task.creator_id?.firstName?.charAt(0) || 'A'}
                     </div>
                     <div className="flex flex-col">

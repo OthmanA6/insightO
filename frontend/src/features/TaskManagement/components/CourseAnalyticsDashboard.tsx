@@ -32,7 +32,7 @@ export function CourseAnalyticsDashboard({ courseId }: { courseId: string }) {
   }, [courseId, viewMode, data]);
 
   return (
-    <div className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+    <div className="space-y-8 animate-in fade-in duration-300">
 
       {/* View Mode Toggle */}
       <div className="flex justify-center mb-8">

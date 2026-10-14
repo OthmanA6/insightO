@@ -1,5 +1,4 @@
-import { Stack } from 'expo-router';
-import { ThemeProvider as NavThemeProvider, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { Stack, ThemeProvider as NavThemeProvider, DefaultTheme, DarkTheme } from 'expo-router';
 import { AuthProvider, useAuth } from '../src/context/AuthContext';
 import { ThemeProvider, useTheme } from '../src/context/ThemeContext';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';

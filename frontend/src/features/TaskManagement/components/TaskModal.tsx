@@ -273,7 +273,7 @@ export function TaskModal({ open, onClose, task, onSave, contextDepartmentId, co
                                     {(!contextDepartmentId || contextCourseId) && (
                                         <TabsTrigger
                                             value="COURSE"
-                                            className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold text-xs flex items-center gap-2"
+                                            className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold text-xs flex items-center gap-2"
                                         >
                                             <BookOpen className="h-3.5 w-3.5" /> Course
                                         </TabsTrigger>
@@ -281,7 +281,7 @@ export function TaskModal({ open, onClose, task, onSave, contextDepartmentId, co
                                     {!contextCourseId && (
                                         <TabsTrigger
                                             value="DEPARTMENT"
-                                            className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold text-xs flex items-center gap-2"
+                                            className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold text-xs flex items-center gap-2"
                                         >
                                             <Building2 className="h-3.5 w-3.5" /> Dept
                                         </TabsTrigger>
@@ -289,7 +289,7 @@ export function TaskModal({ open, onClose, task, onSave, contextDepartmentId, co
                                     {!contextCourseId && (
                                         <TabsTrigger
                                             value="SPECIFIC"
-                                            className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-content text-content-muted font-bold text-xs flex items-center gap-2"
+                                            className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-content-muted font-bold text-xs flex items-center gap-2"
                                         >
                                             <Users className="h-3.5 w-3.5" /> Specific
                                         </TabsTrigger>
@@ -513,7 +513,7 @@ export function TaskModal({ open, onClose, task, onSave, contextDepartmentId, co
                         <Button
                             type="submit"
                             disabled={isSubmitting}
-                            className="h-12 px-10 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:bg-panel-hover text-content font-bold shadow-indigo-500/20 transition-[border-color,background-color] flex items-center gap-2"
+                            className="h-12 px-10 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:bg-panel-hover text-white font-bold shadow-indigo-500/20 transition-[border-color,background-color] flex items-center gap-2"
                         >
                             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                             {task ? 'Update Infrastructure' : 'Authorize Publication'}

@@ -27,6 +27,7 @@ import MySubmissionsPage from '@/features/TaskManagement/pages/MySubmissionsPage
 import StudentSurveysPage from '@/features/StudentPortal/pages/StudentSurveysPage'
 import CourseDetailView from '@/features/TaskManagement/pages/CourseDetailView'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useTheme } from '@/shared/components/ui/ThemeToggle'
 
 import InstructorDashboardPage from '@/features/InstructorPortal/pages/InstructorDashboardPage'
 import InstructorCourseManagement from '@/features/InstructorPortal/pages/InstructorCourseManagement'
@@ -122,17 +123,25 @@ function App() {
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
 
-      {/* ── Sonner Toaster ─────────────────────────────────────── */}
-      <Toaster
-        position="top-right"
-        richColors
-        toastOptions={{
-          style: {
-            fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
-          },
-        }}
-      />
+      <AppToaster />
     </>
+  )
+}
+
+function AppToaster() {
+  const { theme } = useTheme()
+  return (
+    <Toaster
+      position="top-right"
+      theme={theme}
+      richColors
+      toastOptions={{
+        style: {
+          fontFamily: 'inherit',
+          borderRadius: '14px',
+        },
+      }}
+    />
   )
 }
 
